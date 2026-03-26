@@ -34,10 +34,7 @@ class _Panel2MainMenuScreenState extends State<Panel2MainMenuScreen>
     _slideAnim = Tween<double>(begin: -40, end: 0).animate(
       CurvedAnimation(parent: _enterController, curve: Curves.easeOutCubic),
     );
-    _fadeAnim = CurvedAnimation(
-      parent: _enterController,
-      curve: Curves.easeIn,
-    );
+    _fadeAnim = CurvedAnimation(parent: _enterController, curve: Curves.easeIn);
 
     _enterController.forward();
   }
@@ -74,16 +71,28 @@ class _Panel2MainMenuScreenState extends State<Panel2MainMenuScreen>
         title: Text('Exit Game', style: AppTextStyles.dialogTitle),
         content: Text(
           'Are you sure you want to quit?',
-          style: AppTextStyles.bodyMedium.copyWith(color: AppColors.textSecondary),
+          style: AppTextStyles.bodyMedium.copyWith(
+            color: AppColors.textSecondary,
+          ),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel', style: AppTextStyles.labelLarge.copyWith(color: AppColors.textSecondary)),
+            child: Text(
+              'Cancel',
+              style: AppTextStyles.labelLarge.copyWith(
+                color: AppColors.textSecondary,
+              ),
+            ),
           ),
           TextButton(
             onPressed: () => SystemNavigator.pop(),
-            child: Text('Exit', style: AppTextStyles.labelLarge.copyWith(color: AppColors.dangerRed)),
+            child: Text(
+              'Exit',
+              style: AppTextStyles.labelLarge.copyWith(
+                color: AppColors.dangerRed,
+              ),
+            ),
           ),
         ],
       ),
@@ -420,8 +429,9 @@ class _SecondaryMenuButtonState extends State<_SecondaryMenuButton> {
     final borderColor = widget.isDanger
         ? AppColors.dangerRed.withAlpha(180)
         : AppColors.borderColor;
-    final labelColor =
-        widget.isDanger ? const Color(0xFFFF8888) : AppColors.textPrimary;
+    final labelColor = widget.isDanger
+        ? const Color(0xFFFF8888)
+        : AppColors.textPrimary;
 
     return MouseRegion(
       onEnter: (_) => setState(() => _hovered = true),
@@ -436,7 +446,12 @@ class _SecondaryMenuButtonState extends State<_SecondaryMenuButton> {
             borderRadius: BorderRadius.circular(4),
             border: Border.all(color: borderColor, width: 1),
             boxShadow: _hovered
-                ? [BoxShadow(color: AppColors.xpPurple.withAlpha(40), blurRadius: 10)]
+                ? [
+                    BoxShadow(
+                      color: AppColors.xpPurple.withAlpha(40),
+                      blurRadius: 10,
+                    ),
+                  ]
                 : [],
           ),
           child: Row(

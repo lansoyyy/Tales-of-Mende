@@ -89,7 +89,8 @@ class _Panel1SplashScreenState extends State<Panel1SplashScreen>
               fit: BoxFit.cover,
               width: size.width,
               height: size.height,
-              errorBuilder: (_, __, ___) => Container(color: AppColors.background),
+              errorBuilder: (_, __, ___) =>
+                  Container(color: AppColors.background),
             ),
 
             // ── Dark vignette overlay ───────────────────────────────────────
@@ -159,7 +160,8 @@ class _Panel1SplashScreenState extends State<Panel1SplashScreen>
                             children: [
                               // Filled portion
                               Container(
-                                width: constraints.maxWidth * _progressAnim.value,
+                                width:
+                                    constraints.maxWidth * _progressAnim.value,
                                 height: 4,
                                 decoration: BoxDecoration(
                                   gradient: const LinearGradient(
