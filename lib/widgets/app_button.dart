@@ -54,17 +54,16 @@ class AppButton extends StatelessWidget {
     Widget? suffixIcon,
     bool isLoading = false,
     bool isFullWidth = true,
-  }) =>
-      AppButton(
-        key: key,
-        label: label,
-        onPressed: onPressed,
-        variant: AppButtonVariant.outline,
-        prefixIcon: prefixIcon,
-        suffixIcon: suffixIcon,
-        isLoading: isLoading,
-        isFullWidth: isFullWidth,
-      );
+  }) => AppButton(
+    key: key,
+    label: label,
+    onPressed: onPressed,
+    variant: AppButtonVariant.outline,
+    prefixIcon: prefixIcon,
+    suffixIcon: suffixIcon,
+    isLoading: isLoading,
+    isFullWidth: isFullWidth,
+  );
 
   factory AppButton.ghost({
     Key? key,
@@ -72,29 +71,27 @@ class AppButton extends StatelessWidget {
     VoidCallback? onPressed,
     Widget? prefixIcon,
     bool isFullWidth = false,
-  }) =>
-      AppButton(
-        key: key,
-        label: label,
-        onPressed: onPressed,
-        variant: AppButtonVariant.ghost,
-        prefixIcon: prefixIcon,
-        isFullWidth: isFullWidth,
-      );
+  }) => AppButton(
+    key: key,
+    label: label,
+    onPressed: onPressed,
+    variant: AppButtonVariant.ghost,
+    prefixIcon: prefixIcon,
+    isFullWidth: isFullWidth,
+  );
 
   factory AppButton.danger({
     Key? key,
     required String label,
     VoidCallback? onPressed,
     bool isFullWidth = true,
-  }) =>
-      AppButton(
-        key: key,
-        label: label,
-        onPressed: onPressed,
-        variant: AppButtonVariant.danger,
-        isFullWidth: isFullWidth,
-      );
+  }) => AppButton(
+    key: key,
+    label: label,
+    onPressed: onPressed,
+    variant: AppButtonVariant.danger,
+    isFullWidth: isFullWidth,
+  );
 
   // ── Helpers ──────────────────────────────────────────────────────────────
 
@@ -120,7 +117,10 @@ class AppButton extends StatelessWidget {
 
   BorderSide _borderSide() {
     return switch (variant) {
-      AppButtonVariant.outline => const BorderSide(color: AppColors.accent, width: 2),
+      AppButtonVariant.outline => const BorderSide(
+        color: AppColors.accent,
+        width: 2,
+      ),
       AppButtonVariant.danger => const BorderSide(color: AppColors.dangerRed),
       _ => BorderSide.none,
     };
@@ -147,7 +147,12 @@ class AppButton extends StatelessWidget {
                 prefixIcon!,
                 const SizedBox(width: AppConstants.spacingSm),
               ],
-              Text(label, style: AppTextStyles.buttonText.copyWith(color: _foregroundColor())),
+              Text(
+                label,
+                style: AppTextStyles.buttonText.copyWith(
+                  color: _foregroundColor(),
+                ),
+              ),
               if (suffixIcon != null) ...[
                 const SizedBox(width: AppConstants.spacingSm),
                 suffixIcon!,
@@ -161,10 +166,15 @@ class AppButton extends StatelessWidget {
       child: ElevatedButton(
         onPressed: disabled ? null : onPressed,
         style: ElevatedButton.styleFrom(
-          backgroundColor: disabled ? AppColors.textDisabled : _backgroundColor(),
+          backgroundColor: disabled
+              ? AppColors.textDisabled
+              : _backgroundColor(),
           foregroundColor: _foregroundColor(),
-          elevation: variant == AppButtonVariant.ghost ? 0 : AppConstants.elevationMd,
-          padding: padding ??
+          elevation: variant == AppButtonVariant.ghost
+              ? 0
+              : AppConstants.elevationMd,
+          padding:
+              padding ??
               const EdgeInsets.symmetric(
                 horizontal: AppConstants.spacingLg,
                 vertical: AppConstants.spacingSm,

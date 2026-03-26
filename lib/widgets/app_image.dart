@@ -40,18 +40,17 @@ class AppImage extends StatelessWidget {
     Color? color,
     BlendMode? colorBlendMode,
     String? semanticLabel,
-  }) =>
-      AppImage(
-        assetPath,
-        key: key,
-        fit: BoxFit.cover,
-        width: double.infinity,
-        height: double.infinity,
-        alignment: alignment,
-        color: color,
-        colorBlendMode: colorBlendMode,
-        semanticLabel: semanticLabel,
-      );
+  }) => AppImage(
+    assetPath,
+    key: key,
+    fit: BoxFit.cover,
+    width: double.infinity,
+    height: double.infinity,
+    alignment: alignment,
+    color: color,
+    colorBlendMode: colorBlendMode,
+    semanticLabel: semanticLabel,
+  );
 
   /// Preserves aspect ratio and fills width.
   factory AppImage.fullWidth(
@@ -59,15 +58,14 @@ class AppImage extends StatelessWidget {
     Key? key,
     double? height,
     String? semanticLabel,
-  }) =>
-      AppImage(
-        assetPath,
-        key: key,
-        fit: BoxFit.fitWidth,
-        width: double.infinity,
-        height: height,
-        semanticLabel: semanticLabel,
-      );
+  }) => AppImage(
+    assetPath,
+    key: key,
+    fit: BoxFit.fitWidth,
+    width: double.infinity,
+    height: height,
+    semanticLabel: semanticLabel,
+  );
 
   @override
   Widget build(BuildContext context) {

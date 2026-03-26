@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_constants.dart';
-import '../core/constants/app_text_styles.dart';
 import 'app_button.dart';
 import 'app_text.dart';
 
@@ -90,7 +89,7 @@ class AppDialog extends StatelessWidget {
               icon!,
               const SizedBox(height: AppConstants.spacingMd),
             ],
-            AppText.dialogTitle(title, textAlign: TextAlign.center),
+            AppText.bodyLarge(title, textAlign: TextAlign.center),
             if (message != null || content != null) ...[
               const SizedBox(height: AppConstants.spacingMd),
               content ??
@@ -102,16 +101,10 @@ class AppDialog extends StatelessWidget {
             ],
             const SizedBox(height: AppConstants.spacingLg),
             if (primaryLabel != null)
-              AppButton(
-                label: primaryLabel!,
-                onPressed: onPrimary,
-              ),
+              AppButton(label: primaryLabel!, onPressed: onPrimary),
             if (secondaryLabel != null) ...[
               const SizedBox(height: AppConstants.spacingSm),
-              AppButton.ghost(
-                label: secondaryLabel!,
-                onPressed: onSecondary,
-              ),
+              AppButton.ghost(label: secondaryLabel!, onPressed: onSecondary),
             ],
           ],
         ),
@@ -176,7 +169,7 @@ class AppConfirmDialog extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            AppText.dialogTitle(title, textAlign: TextAlign.center),
+            AppText.bodyLarge(title, textAlign: TextAlign.center),
             const SizedBox(height: AppConstants.spacingMd),
             AppText.bodyMedium(
               message,

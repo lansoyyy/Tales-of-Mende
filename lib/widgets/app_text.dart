@@ -36,67 +36,347 @@ class AppText extends StatelessWidget {
 
   // ── Named constructors for each semantic style ──────────────────────────
 
-  factory AppText.displayLarge(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.displayLarge, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.displayLarge(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.displayLarge,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.displayMedium(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.displayMedium, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.displayMedium(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.displayMedium,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.displaySmall(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.displaySmall, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.displaySmall(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.displaySmall,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.headlineLarge(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.headlineLarge, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.headlineLarge(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.headlineLarge,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.headlineMedium(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.headlineMedium, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.headlineMedium(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.headlineMedium,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.headlineSmall(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.headlineSmall, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.headlineSmall(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.headlineSmall,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.titleLarge(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.titleLarge, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.titleLarge(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.titleLarge,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.titleMedium(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.titleMedium, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.titleMedium(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.titleMedium,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.titleSmall(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.titleSmall, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.titleSmall(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.titleSmall,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.bodyLarge(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.bodyLarge, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.bodyLarge(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.bodyLarge,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.bodyMedium(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.bodyMedium, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.bodyMedium(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.bodyMedium,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.bodySmall(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.bodySmall, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.bodySmall(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.bodySmall,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.labelLarge(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.labelLarge, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.labelLarge(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.labelLarge,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.labelMedium(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.labelMedium, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.labelMedium(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.labelMedium,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.labelSmall(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.labelSmall, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.labelSmall(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.labelSmall,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
   // ── Game-specific ────────────────────────────────────────────────────────
 
-  factory AppText.questTitle(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.questTitle, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.questTitle(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.questTitle,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.questDescription(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.questDescription, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.questDescription(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.questDescription,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.buttonText(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.buttonText, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.buttonText(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.buttonText,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.score(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.scoreText, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.score(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.scoreText,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
-  factory AppText.narrative(String data, {Key? key, TextAlign? textAlign, int? maxLines, TextOverflow? overflow, Color? color}) =>
-      AppText(data, key: key, style: AppTextStyles.narrative, textAlign: textAlign, maxLines: maxLines, overflow: overflow, color: color);
+  factory AppText.narrative(
+    String data, {
+    Key? key,
+    TextAlign? textAlign,
+    int? maxLines,
+    TextOverflow? overflow,
+    Color? color,
+  }) => AppText(
+    data,
+    key: key,
+    style: AppTextStyles.narrative,
+    textAlign: textAlign,
+    maxLines: maxLines,
+    overflow: overflow,
+    color: color,
+  );
 
   @override
   Widget build(BuildContext context) {
@@ -133,10 +413,7 @@ class AppRichText extends StatelessWidget {
       textAlign: textAlign,
       maxLines: maxLines,
       overflow: overflow ?? TextOverflow.clip,
-      text: TextSpan(
-        style: AppTextStyles.bodyMedium,
-        children: children,
-      ),
+      text: TextSpan(style: AppTextStyles.bodyMedium, children: children),
     );
   }
 
@@ -153,9 +430,6 @@ class AppRichText extends StatelessWidget {
   }
 
   /// Bold/gold span for highlighting keywords.
-  static TextSpan highlight(String text) => span(
-        text,
-        style: AppTextStyles.labelLarge,
-        color: AppColors.questGold,
-      );
+  static TextSpan highlight(String text) =>
+      span(text, style: AppTextStyles.labelLarge, color: AppColors.questGold);
 }

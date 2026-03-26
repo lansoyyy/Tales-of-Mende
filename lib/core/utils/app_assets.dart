@@ -6,28 +6,22 @@ class AppAssets {
   // ── Panel 1 — Splash ─────────────────────────────────────────────────────
   static const String splashBackground =
       'assets/images/Panel 1/\$OpeningLoading.png';
-  static const String splashLogo =
-      'assets/images/Panel 1/\$tales of mende.png';
+  static const String splashLogo = 'assets/images/Panel 1/\$tales of mende.png';
 
   // ── Panel 2 — Main Menu ──────────────────────────────────────────────────
   static const String menuBackground =
       'assets/images/Panel 2/\$OpeningLoading copy 2.png';
-  static const String menuLogo =
-      'assets/images/Panel 2/\$tales of mende.png';
-  static const String menuLetters =
-      'assets/images/Panel 2/\$letters.png';
-  static const String menuLoading =
-      'assets/images/Panel 2/\$loading.png';
+  static const String menuLogo = 'assets/images/Panel 2/\$tales of mende.png';
+  static const String menuLetters = 'assets/images/Panel 2/\$letters.png';
+  static const String menuLoading = 'assets/images/Panel 2/\$loading.png';
   static const String menuStartButton =
       'assets/images/Panel 2/\$start button copy.png';
 
   // ── Panel 3 — Auth / Login ───────────────────────────────────────────────
   static const String authBackground =
       'assets/images/Panel 3/\$OpeningLoading copy 2.png';
-  static const String authBigBoard =
-      'assets/images/Panel 3/\$big board.png';
-  static const String authButtons =
-      'assets/images/Panel 3/\$buttons copy.png';
+  static const String authBigBoard = 'assets/images/Panel 3/\$big board.png';
+  static const String authButtons = 'assets/images/Panel 3/\$buttons copy.png';
   static const String authCreateAccount =
       'assets/images/Panel 3/\$create account.png';
   static const String authLoginSignup =
@@ -36,16 +30,14 @@ class AppAssets {
   // ── Panel 4 — "Are You Ready?" ───────────────────────────────────────────
   static const String readyBackground =
       'assets/images/Panel 4/\$OpeningLoading copy 3.png';
-  static const String readyBoard =
-      'assets/images/Panel 4/\$board copy.png';
+  static const String readyBoard = 'assets/images/Panel 4/\$board copy.png';
   static const String readyLetter =
       'assets/images/Panel 4/\$are you ready letter.png';
 
   // ── Panel 5 — Game Loading ───────────────────────────────────────────────
   static const String loadingBackground =
       'assets/images/Panel 5/\$OpeningLoading copy.png';
-  static const String loadingBar =
-      'assets/images/Panel 5/\$loading copy.png';
+  static const String loadingBar = 'assets/images/Panel 5/\$loading copy.png';
 
   // ── Panel 6 — Home / Hub ─────────────────────────────────────────────────
   static const String homeBackground =
@@ -54,14 +46,12 @@ class AppAssets {
       'assets/images/Panel 6/\$back button copy.png';
   static const String homeBookKnowledge =
       'assets/images/Panel 6/\$book knowledge.png';
-  static const String homeOptions =
-      'assets/images/Panel 6/\$options copy.png';
+  static const String homeOptions = 'assets/images/Panel 6/\$options copy.png';
   static const String homeProfileFolder =
       'assets/images/Panel 6/\$profile folder.png';
   static const String homeQuestFolder =
       'assets/images/Panel 6/\$quest folder copy.png';
-  static const String homeSparks =
-      'assets/images/Panel 6/\$sparks.png';
+  static const String homeSparks = 'assets/images/Panel 6/\$sparks.png';
 
   // ── Panel 7-9 — Story / Dialogue ─────────────────────────────────────────
   static const String storyBackground =
@@ -72,8 +62,7 @@ class AppAssets {
       'assets/images/Panel 7-9/\$small letters copy.png';
   static const String storyNextButton =
       'assets/images/Panel 7-9/\$next button copy.png';
-  static const String storyLetters =
-      'assets/images/Panel 7-9/Letters.png';
+  static const String storyLetters = 'assets/images/Panel 7-9/Letters.png';
 
   // ── Panel 10 Q1 — Quest 1: Chemistry Lab ─────────────────────────────────
   static const String quest1Background =
@@ -84,8 +73,7 @@ class AppAssets {
       'assets/images/Panel 10 Q1/\$bigletters copy.png';
   static const String quest1SmallLetters =
       'assets/images/Panel 10 Q1/\$small letters copy.png';
-  static const String quest1Marks =
-      'assets/images/Panel 10 Q1/\$marks.png';
+  static const String quest1Marks = 'assets/images/Panel 10 Q1/\$marks.png';
   static const String quest1MoveButton =
       'assets/images/Panel 10 Q1/\$move button copy.png';
   static const String quest1NextButton =
@@ -120,8 +108,7 @@ class AppAssets {
       'assets/images/Panel 11/\$bigletters.png';
   static const String questCompleteSmallLetters =
       'assets/images/Panel 11/\$small letters.png';
-  static const String questCompleteMarks =
-      'assets/images/Panel 11/\$marks.png';
+  static const String questCompleteMarks = 'assets/images/Panel 11/\$marks.png';
   static const String questCompleteSparks =
       'assets/images/Panel 11/\$sparks.png';
   static const String questCompleteHomeButton =

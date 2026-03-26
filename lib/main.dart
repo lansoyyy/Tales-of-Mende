@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'core/constants/app_constants.dart';
 import 'theme/app_theme.dart';
+import 'screens/panel1_splash_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
-  // Lock to portrait for mobile game
+  // Lock to landscape — Tales of Mende is a landscape-only game
   SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
   ]);
   runApp(const TalesOfMendeApp());
 }
@@ -22,23 +23,9 @@ class TalesOfMendeApp extends StatelessWidget {
       title: AppConstants.appName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.theme,
-      // Placeholder home — replace with your router / splash screen later
-      home: const _PlaceholderHome(),
+      home: const Panel1SplashScreen(),
     );
   }
 }
 
-/// Temporary placeholder shown until screens are wired up.
-class _PlaceholderHome extends StatelessWidget {
-  const _PlaceholderHome();
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('Tales of Mende'),
-      ),
-    );
-  }
-}
-
+// _PlaceholderHome removed — Panel1SplashScreen is now the entry point.
