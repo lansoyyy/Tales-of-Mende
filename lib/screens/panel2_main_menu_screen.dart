@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import '../core/utils/app_assets.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
+import 'panel3_auth_screen.dart';
 
 /// Panel 2 — Main Menu Screen
 ///
@@ -48,8 +49,14 @@ class _Panel2MainMenuScreenState extends State<Panel2MainMenuScreen>
   // ── Navigation helpers ────────────────────────────────────────────────────
 
   void _onNewGame() {
-    // TODO: navigate to character select / game start screen
-    _showComingSoon('New Game');
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        pageBuilder: (_, __, ___) => const Panel3AuthScreen(),
+        transitionsBuilder: (_, anim, __, child) =>
+            FadeTransition(opacity: anim, child: child),
+        transitionDuration: const Duration(milliseconds: 500),
+      ),
+    );
   }
 
   void _onCoop() => _showComingSoon('Co-op');
