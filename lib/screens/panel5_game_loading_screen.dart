@@ -58,7 +58,10 @@ class _Panel5GameLoadingScreenState extends State<Panel5GameLoadingScreen>
       vsync: this,
       duration: const Duration(milliseconds: 500),
     )..value = 1.0;
-    _tipFade = CurvedAnimation(parent: _tipFadeController, curve: Curves.easeIn);
+    _tipFade = CurvedAnimation(
+      parent: _tipFadeController,
+      curve: Curves.easeIn,
+    );
 
     _fadeController.forward().then((_) {
       _progressController.forward().then((_) => _navigate());

@@ -97,11 +97,17 @@ class _Panel6OpeningScreenState extends State<Panel6OpeningScreen>
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  _NavIcon(asset: AppAssets.homeProfileFolder, label: 'Profile'),
+                  _NavIcon(
+                    asset: AppAssets.homeProfileFolder,
+                    label: 'Profile',
+                  ),
                   const SizedBox(height: 16),
                   _NavIcon(asset: AppAssets.homeQuestFolder, label: 'Quests'),
                   const SizedBox(height: 16),
-                  _NavIcon(asset: AppAssets.homeBookKnowledge, label: 'Knowledge'),
+                  _NavIcon(
+                    asset: AppAssets.homeBookKnowledge,
+                    label: 'Knowledge',
+                  ),
                   const SizedBox(height: 16),
                   _NavIcon(asset: AppAssets.homeOptions, label: 'Options'),
                 ],
@@ -197,8 +203,11 @@ class _NavIconState extends State<_NavIcon> {
             height: 24,
             color: _hovered ? AppColors.accent : AppColors.textPrimary,
             colorBlendMode: BlendMode.srcIn,
-            errorBuilder: (_, __, ___) =>
-                Icon(Icons.help_outline, color: AppColors.textSecondary, size: 20),
+            errorBuilder: (_, __, ___) => Icon(
+              Icons.help_outline,
+              color: AppColors.textSecondary,
+              size: 20,
+            ),
           ),
         ),
       ),

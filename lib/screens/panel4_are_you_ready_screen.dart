@@ -139,16 +139,8 @@ class _Panel4AreYouReadyScreenState extends State<Panel4AreYouReadyScreen>
           ),
 
           // Board decoration corners
-          Positioned(
-            top: 6,
-            left: 6,
-            child: _boardCornerIcon(),
-          ),
-          Positioned(
-            top: 6,
-            right: 6,
-            child: _boardCornerIcon(),
-          ),
+          Positioned(top: 6, left: 6, child: _boardCornerIcon()),
+          Positioned(top: 6, right: 6, child: _boardCornerIcon()),
 
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
@@ -209,14 +201,8 @@ class _Panel4AreYouReadyScreenState extends State<Panel4AreYouReadyScreen>
                       fontWeight: FontWeight.w700,
                       letterSpacing: 6,
                       shadows: [
-                        Shadow(
-                          color: _neonOrangeGlow,
-                          blurRadius: 20,
-                        ),
-                        const Shadow(
-                          color: Color(0x55FFAA00),
-                          blurRadius: 40,
-                        ),
+                        Shadow(color: _neonOrangeGlow, blurRadius: 20),
+                        const Shadow(color: Color(0x55FFAA00), blurRadius: 40),
                       ],
                     ),
                   ),
@@ -338,9 +324,7 @@ class _RetroChoiceButtonState extends State<_RetroChoiceButton> {
         child: AnimatedDefaultTextStyle(
           duration: const Duration(milliseconds: 120),
           style: AppTextStyles.headlineSmall.copyWith(
-            color: active
-                ? widget.color
-                : widget.color.withAlpha(160),
+            color: active ? widget.color : widget.color.withAlpha(160),
             fontSize: active ? 22 : 18,
             letterSpacing: 3,
             shadows: active

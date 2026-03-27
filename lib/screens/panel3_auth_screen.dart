@@ -41,9 +41,10 @@ class _Panel3AuthScreenState extends State<Panel3AuthScreen>
       vsync: this,
       duration: const Duration(milliseconds: 500),
     );
-    _boardScale = Tween<double>(begin: 0.85, end: 1.0).animate(
-      CurvedAnimation(parent: _boardEnter, curve: Curves.easeOutBack),
-    );
+    _boardScale = Tween<double>(
+      begin: 0.85,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _boardEnter, curve: Curves.easeOutBack));
     _boardFade = CurvedAnimation(parent: _boardEnter, curve: Curves.easeIn);
     _boardEnter.forward();
   }
@@ -104,7 +105,8 @@ class _Panel3AuthScreenState extends State<Panel3AuthScreen>
           Image.asset(
             AppAssets.authBackground,
             fit: BoxFit.cover,
-            errorBuilder: (_, __, ___) => Container(color: const Color(0xFF8BC34A)),
+            errorBuilder: (_, __, ___) =>
+                Container(color: const Color(0xFF8BC34A)),
           ),
 
           // ── Green tint overlay to give grassy feel ─────────────────────────
@@ -134,8 +136,11 @@ class _Panel3AuthScreenState extends State<Panel3AuthScreen>
                   borderRadius: BorderRadius.circular(6),
                   border: Border.all(color: _woodBorder),
                 ),
-                child: const Icon(Icons.arrow_back_ios_new,
-                    color: Colors.white, size: 16),
+                child: const Icon(
+                  Icons.arrow_back_ios_new,
+                  color: Colors.white,
+                  size: 16,
+                ),
               ),
             ),
           ),
@@ -196,10 +201,9 @@ class _Panel3AuthScreenState extends State<Panel3AuthScreen>
                 height: 36,
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  gradient: const RadialGradient(colors: [
-                    Color(0xFFFF6B6B),
-                    Color(0xFFCC2222),
-                  ]),
+                  gradient: const RadialGradient(
+                    colors: [Color(0xFFFF6B6B), Color(0xFFCC2222)],
+                  ),
                   border: Border.all(color: Colors.white, width: 2),
                   boxShadow: [
                     BoxShadow(
@@ -214,11 +218,8 @@ class _Panel3AuthScreenState extends State<Panel3AuthScreen>
                   height: 20,
                   color: Colors.white,
                   colorBlendMode: BlendMode.srcIn,
-                  errorBuilder: (_, __, ___) => const Icon(
-                    Icons.close,
-                    color: Colors.white,
-                    size: 18,
-                  ),
+                  errorBuilder: (_, __, ___) =>
+                      const Icon(Icons.close, color: Colors.white, size: 18),
                 ),
               ),
             ),
@@ -523,7 +524,10 @@ class _WoodField extends StatelessWidget {
         filled: true,
         fillColor: _fieldBg,
         isDense: true,
-        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: 12,
+          vertical: 10,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
           borderSide: const BorderSide(color: _fieldBorder, width: 1.5),
