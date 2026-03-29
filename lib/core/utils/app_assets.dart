@@ -98,6 +98,10 @@ class AppAssets {
       'assets/images/Panel 10 Q1/\$MC_Boy_001.png';
   static const String quest1CharacterGirl =
       'assets/images/Panel 10 Q1/\$MC_Girl_001.png';
+  static const String quest1ReceptionHall =
+      'assets/images/Panel 10 Q1/dc483360-22a9-4fc1-8087-f16dc8727903.jpeg';
+  static const String quest1ReceptionHall2 =
+      'assets/images/Panel 10 Q1/40476a64-1f18-4261-bc38-196ec6d8a3c4.jpeg';
 
   // ── Panel 11 — Quest Complete ─────────────────────────────────────────────
   static const String questCompleteBg =

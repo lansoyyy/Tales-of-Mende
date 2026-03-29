@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/utils/app_assets.dart';
+import 'quest1_panel1_hallway.dart';
 
 // ════════════════════════════════════════════════════════════════════════════
 //  SCRIPT — Panel 8
@@ -253,9 +254,16 @@ class _Panel8LetterSceneState extends State<Panel8LetterScene>
     _endFadeCtrl.forward().then((_) {
       if (!mounted) return;
       _endBannerCtrl.forward().then((_) {
-        Future.delayed(const Duration(milliseconds: 2200), () {
+        Future.delayed(const Duration(milliseconds: 1400), () {
           if (!mounted) return;
-          Navigator.of(context).pop();
+          Navigator.of(context).pushReplacement(
+            PageRouteBuilder(
+              pageBuilder: (_, __, ___) => const Quest1Panel1Hallway(),
+              transitionsBuilder: (_, anim, __, child) =>
+                  FadeTransition(opacity: anim, child: child),
+              transitionDuration: const Duration(milliseconds: 800),
+            ),
+          );
         });
       });
     });
