@@ -20,17 +20,12 @@ enum _EntryType {
 }
 
 class _ScriptEntry {
-  const _ScriptEntry(this.type, this.text, {this.speaker});
+  const _ScriptEntry(this.type, this.text);
   final _EntryType type;
-  final String? speaker;
   final String text;
 }
 
-const String _playerTag = 'You';
-const String _copperTag = 'Copper';
-
 const List<_ScriptEntry> _script = [
-  // People ambience / window gaze
   _ScriptEntry(_EntryType.sfxBeat, '[People Ambience SFX]'),
   _ScriptEntry(
     _EntryType.narrative,
@@ -38,114 +33,6 @@ const List<_ScriptEntry> _script = [
     'bustling again for another productive day. Your train of thought was '
     'quickly interrupted by a loud, enthusiastic knock on the door.',
   ),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"Must be the mailman."',
-    speaker: _playerTag,
-  ),
-  _ScriptEntry(
-    _EntryType.narrative,
-    'You placed your coffee on the counter and walked to the front door.',
-  ),
-  _ScriptEntry(_EntryType.sfxBeat, '[Door Creak SFX]'),
-
-  // Copper arrives
-  _ScriptEntry(
-    _EntryType.narrative,
-    'You open the door to find a cheerful young man grinning at you.',
-  ),
-  _ScriptEntry(_EntryType.popUpFx, '[Pop Up FX]'),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"Gooood morning, [Character]!"',
-    speaker: _copperTag,
-  ),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"Copper! You\'re bright and early… as usual."',
-    speaker: _playerTag,
-  ),
-  _ScriptEntry(
-    _EntryType.narrative,
-    'You noticed the small pile of letters in his hand.',
-  ),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"Whatcha got there? From my parents?"',
-    speaker: _playerTag,
-  ),
-  _ScriptEntry(
-    _EntryType.narrative,
-    'Copper chuckled sheepishly, shuffling the pile before handing it to you.',
-  ),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"You could say that."',
-    speaker: _copperTag,
-  ),
-  _ScriptEntry(
-    _EntryType.narrative,
-    'You nodded and gave a quiet thanks while you skimmed through the envelopes.',
-  ),
-  _ScriptEntry(_EntryType.sfxBeat, '[Paper SFX]'),
-  _ScriptEntry(
-    _EntryType.innerThought,
-    'From mom… from dad… bills…',
-  ),
-
-  // Discovering the letter
-  _ScriptEntry(
-    _EntryType.narrative,
-    'Your hands paused at the unfamiliar piece of paper.',
-  ),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"Huh? What\'s this?"',
-    speaker: _playerTag,
-  ),
-  _ScriptEntry(
-    _EntryType.narrative,
-    'You slowly pulled it out from the pile. Your eyes widened in recognition '
-    'of the seal.',
-  ),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"Copper,"',
-    speaker: _playerTag,
-  ),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"Yes?"',
-    speaker: _copperTag,
-  ),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"Do you see what\'s in my hand?"',
-    speaker: _playerTag,
-  ),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"A letter…?"',
-    speaker: _copperTag,
-  ),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"No!—Well, yes—I mean—!" You sighed. "It\'s a letter from Elixir Enterprises!"',
-    speaker: _playerTag,
-  ),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"Well, what does it say?"',
-    speaker: _copperTag,
-  ),
-  _ScriptEntry(
-    _EntryType.narrative,
-    'You cautiously traced your finger over the waxed seal before peeling it off the envelope.',
-  ),
-  _ScriptEntry(_EntryType.sfxBeat, '[Paper SFX]'),
-  _ScriptEntry(_EntryType.letterReveal, ''),
-
-  // Scene transition to Panel 8
   _ScriptEntry(_EntryType.endScene, ''),
 ];
 
@@ -895,26 +782,9 @@ class _VnTextBox extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final hasLabel = entry.type == _EntryType.dialogue && entry.speaker != null;
-
-    final textStyle = switch (entry.type) {
-      _EntryType.narrative => AppTextStyles.narrative,
-      _EntryType.innerThought => AppTextStyles.narrative.copyWith(
-          color: AppColors.accentLight,
-        ),
-      _EntryType.dialogue => entry.speaker == _copperTag
-          ? AppTextStyles.bodyMedium.copyWith(
-              color: const Color(0xFFFFEECC),
-              fontSize: 15,
-              height: 1.6,
-            )
-          : AppTextStyles.bodyMedium.copyWith(
-              color: AppColors.textPrimary,
-              fontSize: 15,
-              height: 1.6,
-            ),
-      _ => AppTextStyles.bodyMedium,
-    };
+    final textStyle = entry.type == _EntryType.innerThought
+        ? AppTextStyles.narrative.copyWith(color: AppColors.accentLight)
+        : AppTextStyles.narrative;
 
     return Container(
       decoration: const BoxDecoration(
@@ -922,43 +792,24 @@ class _VnTextBox extends StatelessWidget {
         border: Border(top: BorderSide(color: AppColors.accent, width: 1.5)),
       ),
       padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
         children: [
-          if (hasLabel) ...[
-            Text(
-              entry.speaker!,
-              style: AppTextStyles.labelMedium.copyWith(
-                color: entry.speaker == _copperTag
-                    ? AppColors.questGold
-                    : AppColors.accentLight,
-                letterSpacing: 1.2,
-                fontSize: 13,
-              ),
-            ),
-            const SizedBox(height: 6),
-          ],
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(child: Text(displayText, style: textStyle)),
-              if (showBlink)
-                Padding(
-                  padding: const EdgeInsets.only(left: 4, bottom: 2),
-                  child: Opacity(
-                    opacity: blinkOpacity,
-                    child: Text(
-                      '▼',
-                      style: AppTextStyles.labelSmall.copyWith(
-                        color: AppColors.accentLight,
-                        fontSize: 12,
-                      ),
-                    ),
+          Expanded(child: Text(displayText, style: textStyle)),
+          if (showBlink)
+            Padding(
+              padding: const EdgeInsets.only(left: 4, bottom: 2),
+              child: Opacity(
+                opacity: blinkOpacity,
+                child: Text(
+                  '▼',
+                  style: AppTextStyles.labelSmall.copyWith(
+                    color: AppColors.accentLight,
+                    fontSize: 12,
                   ),
                 ),
-            ],
-          ),
+              ),
+            ),
         ],
       ),
     );

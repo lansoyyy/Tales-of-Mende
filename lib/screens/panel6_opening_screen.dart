@@ -38,10 +38,6 @@ const List<_ScriptEntry> _openingScript = [
     'your hands were so clammy you left a damp mark on your pants after you '
     'were told you could leave the room. You winced at the memory.',
   ),
-  _ScriptEntry(
-    _EntryType.innerThought,
-    'How unprofessional, you thought.',
-  ),
 
   _ScriptEntry(_EntryType.endScene, ''),
 ];
