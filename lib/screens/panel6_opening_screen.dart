@@ -63,90 +63,109 @@ const String _letterBody =
 class _StaircasePainter extends CustomPainter {
   const _StaircasePainter();
 
-  // Warm interior palette
-  static const Color _wallTop = Color(0xFFF5EDD5);
-  static const Color _wallBottom = Color(0xFFE8D9BB);
-  static const Color _wallSide = Color(0xFFDDD0B0);
-  static const Color _treadTop = Color(0xFF8B6035); // step top face
-  static const Color _treadFront = Color(0xFF6B4520); // step riser face
-  static const Color _treadEdge = Color(0xFFA07840); // bright leading edge
-  static const Color _rail = Color(0xFF4A2E10); // banister rail
-  static const Color _spindle = Color(0xFF5A3818); // spindle
-  static const Color _newelPost = Color(0xFF3A2008); // thick post at base
-  static const Color _frameOuter = Color(0xFF3A2E20);
-  static const Color _frameInner = Color(0xFFD5C8A8);
-  static const Color _shadowStep = Color(0x33000000);
+  // Atmospheric morning palette — warm amber, dramatic shadows, dark mahogany
+  static const Color _wallLight  = Color(0xFFCFAB72); // warm amber upper
+  static const Color _wallMid    = Color(0xFF8B6030); // mid amber-brown
+  static const Color _wallDark   = Color(0xFF2E1508); // deep base brown
+  static const Color _wallSide   = Color(0xFF1A0C04); // deep side shadow
+  static const Color _treadFront = Color(0xFF2A1408); // very dark riser
+  static const Color _treadEdge  = Color(0xFFD4A853); // gold leading edge
+  static const Color _treadShine = Color(0x44D4A853); // gold edge shimmer
+  static const Color _rail       = Color(0xFF1E0E06); // ebony banister rail
+  static const Color _spindle    = Color(0xFF2E1A08); // dark walnut spindle
+  static const Color _newelPost  = Color(0xFF180A04); // very dark newel post
+  static const Color _shadowStep = Color(0x66000000); // under-step shadow
 
   @override
   void paint(Canvas canvas, Size size) {
     final w = size.width;
     final h = size.height;
 
-    // ── 1. Wall gradient ─────────────────────────────────────────────────
+    // ── 1. Atmospheric wall gradient (morning light from upper-right) ──────
     canvas.drawRect(
       Rect.fromLTWH(0, 0, w, h),
       Paint()
         ..shader = LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: const [_wallTop, _wallBottom],
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: const [_wallLight, _wallMid, _wallDark],
+          stops: const [0.0, 0.45, 1.0],
         ).createShader(Rect.fromLTWH(0, 0, w, h)),
     );
 
-    // ── 2. Left wall wing (slightly darker) ────────────────────────────────
-    canvas.drawPath(
-      Path()
-        ..moveTo(0, 0)
-        ..lineTo(w * 0.28, 0)
-        ..lineTo(w * 0.28, h)
-        ..lineTo(0, h)
-        ..close(),
+    // ── 2. Left wall deep shadow wing ─────────────────────────────────────
+    canvas.drawRect(
+      Rect.fromLTWH(0, 0, w * 0.22, h),
       Paint()
         ..shader = LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
           colors: [_wallSide, _wallSide.withAlpha(0)],
-        ).createShader(Rect.fromLTWH(0, 0, w * 0.28, h)),
+        ).createShader(Rect.fromLTWH(0, 0, w * 0.22, h)),
     );
 
-    // ── 3. Window bloom (top-center radial glow) ────────────────────────────
-    final bloomCenter = Offset(w * 0.72, h * 0.08);
-    canvas.drawCircle(
-      bloomCenter,
-      h * 0.38,
+    // ── 3. Diagonal morning light shaft from upper-right off-screen window ─
+    final lightPath = Path()
+      ..moveTo(w * 0.68, 0)
+      ..lineTo(w, 0)
+      ..lineTo(w * 0.58, h * 0.58)
+      ..lineTo(w * 0.25, h * 0.58)
+      ..close();
+    canvas.drawPath(
+      lightPath,
       Paint()
-        ..shader = RadialGradient(
-          colors: const [
-            Color(0xCCFFFBE6),
-            Color(0x66F5EDCC),
-            Color(0x00F0E0B0),
-          ],
-          stops: const [0.0, 0.45, 1.0],
-        ).createShader(
-          Rect.fromCircle(center: bloomCenter, radius: h * 0.38),
-        ),
+        ..shader = LinearGradient(
+          begin: Alignment.topRight,
+          end: Alignment.bottomLeft,
+          colors: const [Color(0x55FEC95A), Color(0x00FEC95A)],
+        ).createShader(Rect.fromLTWH(w * 0.25, 0, w * 0.75, h * 0.58)),
     );
 
-    // ── 4. Stair steps ───────────────────────────────────────────────────
+    // ── 4. Wainscot paneling on left wall ─────────────────────────────────
+    canvas.drawRect(
+      Rect.fromLTWH(0, h * 0.60, w * 0.25, 4.0),
+      Paint()..color = const Color(0xFF6B4020),
+    );
+    for (int i = 0; i < 2; i++) {
+      final panelT = h * 0.65 + i * h * 0.15;
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromLTWH(w * 0.022, panelT, w * 0.18, h * 0.12),
+          const Radius.circular(2),
+        ),
+        Paint()..color = const Color(0x22000000),
+      );
+      canvas.drawRRect(
+        RRect.fromRectAndRadius(
+          Rect.fromLTWH(w * 0.027, panelT + h * 0.005, w * 0.17, h * 0.11),
+          const Radius.circular(2),
+        ),
+        Paint()
+          ..color = const Color(0x33C0803A)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 1.0,
+      );
+    }
+
+    // ── 5. Stair steps ────────────────────────────────────────────────────
     const int stepCount = 7;
-    final stairLeft = w * 0.10;
-    final stairRight = w * 0.95;
-    final stairBottom = h * 0.92;
-    final vpX = w * 0.72;
-    final baseStepH = h * 0.11;
-    final baseRiserH = h * 0.055;
+    final stairLeft   = w * 0.12;
+    final stairRight  = w * 0.94;
+    final stairBottom = h * 0.90;
+    final vpX         = w * 0.68;
+    final baseStepH   = h * 0.10;
+    final baseRiserH  = h * 0.055;
 
     for (int i = 0; i < stepCount; i++) {
-      final t = i / stepCount;
-      final pScale = 1.0 - t * 0.62;
-
-      final leftX = _lerp(stairLeft, vpX * 0.68, t);
-      final rightX = _lerp(stairRight, vpX * 1.05, t).clamp(0.0, w);
+      final t      = i / stepCount;
+      final pScale = 1.0 - t * 0.60;
+      final leftX   = _lerp(stairLeft, vpX * 0.72, t);
+      final rightX  = _lerp(stairRight, vpX * 1.04, t).clamp(0.0, w);
       final bottomY = stairBottom - i * (baseStepH + baseRiserH) * 0.72;
-      final topY = bottomY - baseStepH * pScale;
+      final topY    = bottomY - baseStepH * pScale;
       final riserBottom = bottomY + baseRiserH * pScale;
 
-      // Tread top face
+      // Tread — mahogany with light-to-dark gradient
       canvas.drawPath(
         Path()
           ..moveTo(leftX, topY)
@@ -154,30 +173,42 @@ class _StaircasePainter extends CustomPainter {
           ..lineTo(rightX, bottomY)
           ..lineTo(leftX, bottomY)
           ..close(),
-        Paint()..color = _treadTop,
+        Paint()
+          ..shader = LinearGradient(
+            begin: Alignment.centerRight,
+            end: Alignment.centerLeft,
+            colors: const [Color(0xFF7A4A1A), Color(0xFF3E1E08)],
+          ).createShader(Rect.fromLTWH(leftX, topY, rightX - leftX, bottomY - topY)),
       );
 
-      // Shadow on far end
+      // Far-end tread shadow
       canvas.drawPath(
         Path()
-          ..moveTo(rightX - w * 0.06, topY)
+          ..moveTo(rightX - (rightX - leftX) * 0.16, topY)
           ..lineTo(rightX, topY)
           ..lineTo(rightX, bottomY)
-          ..lineTo(rightX - w * 0.06, bottomY)
+          ..lineTo(rightX - (rightX - leftX) * 0.16, bottomY)
           ..close(),
         Paint()..color = _shadowStep,
       );
 
-      // Leading edge highlight
+      // Gold leading-edge highlight
       canvas.drawLine(
         Offset(leftX, bottomY),
         Offset(rightX, bottomY),
         Paint()
           ..color = _treadEdge
-          ..strokeWidth = 2.0,
+          ..strokeWidth = 2.5,
+      );
+      canvas.drawLine(
+        Offset(leftX, bottomY - 2),
+        Offset(rightX, bottomY - 2),
+        Paint()
+          ..color = _treadShine
+          ..strokeWidth = 1.5,
       );
 
-      // Riser / front face
+      // Riser — very dark with gradient
       canvas.drawPath(
         Path()
           ..moveTo(leftX, bottomY)
@@ -185,89 +216,229 @@ class _StaircasePainter extends CustomPainter {
           ..lineTo(rightX, riserBottom)
           ..lineTo(leftX, riserBottom)
           ..close(),
-        Paint()..color = _treadFront,
+        Paint()
+          ..shader = LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: const [_treadFront, Color(0xFF160A04)],
+          ).createShader(
+            Rect.fromLTWH(leftX, bottomY, rightX - leftX, riserBottom - bottomY),
+          ),
       );
     }
 
-    // ── 5. Banister rails ─────────────────────────────────────────────────
+    // ── 6. Banister rails ─────────────────────────────────────────────────
+    final leftRailStart  = Offset(stairLeft + w * 0.06, stairBottom - h * 0.02);
+    final leftRailEnd    = Offset(w * 0.22, h * 0.22);
+    final rightRailStart = Offset(stairRight - w * 0.04, stairBottom - h * 0.02);
+    final rightRailEnd   = Offset(w * 0.74, h * 0.22);
+
+    // Rail drop shadow
+    final railShadow = Paint()
+      ..color = const Color(0x66000000)
+      ..strokeWidth = 14
+      ..strokeCap = StrokeCap.round;
+    canvas.drawLine(leftRailStart, leftRailEnd, railShadow);
+    canvas.drawLine(rightRailStart, rightRailEnd, railShadow);
+
+    // Rail body
     final railPaint = Paint()
       ..color = _rail
-      ..strokeWidth = 8.0
+      ..strokeWidth = 10.0
       ..strokeCap = StrokeCap.round;
-
-    final leftRailStart = Offset(stairLeft + w * 0.08, stairBottom - h * 0.02);
-    final leftRailEnd = Offset(w * 0.20, h * 0.22);
     canvas.drawLine(leftRailStart, leftRailEnd, railPaint);
-
-    final rightRailStart = Offset(stairRight - w * 0.04, stairBottom - h * 0.02);
-    final rightRailEnd = Offset(w * 0.76, h * 0.22);
     canvas.drawLine(rightRailStart, rightRailEnd, railPaint);
 
-    // ── 6. Spindles ────────────────────────────────────────────────────────
+    // Rail top-shine
+    final railShine = Paint()
+      ..color = const Color(0x226B4020)
+      ..strokeWidth = 3
+      ..strokeCap = StrokeCap.round;
+    canvas.drawLine(leftRailStart, leftRailEnd, railShine);
+    canvas.drawLine(rightRailStart, rightRailEnd, railShine);
+
+    // ── 7. Spindles ────────────────────────────────────────────────────────
     const int spindleCount = 10;
-    final spindlePaint = Paint()
-      ..color = _spindle
-      ..strokeWidth = 3.0
-      ..strokeCap = StrokeCap.butt;
-
     for (int i = 0; i < spindleCount; i++) {
       final f = i / (spindleCount - 1);
-      final topX = _lerp(leftRailEnd.dx, leftRailStart.dx, f);
-      final topY = _lerp(leftRailEnd.dy, leftRailStart.dy, f);
-      final spH = h * 0.10 * (1.0 - f * 0.5);
-      canvas.drawLine(Offset(topX, topY), Offset(topX, topY + spH), spindlePaint);
-    }
-    for (int i = 0; i < spindleCount; i++) {
-      final f = i / (spindleCount - 1);
-      final topX = _lerp(rightRailEnd.dx, rightRailStart.dx, f);
-      final topY = _lerp(rightRailEnd.dy, rightRailStart.dy, f);
-      final spH = h * 0.10 * (1.0 - f * 0.5);
-      canvas.drawLine(Offset(topX, topY), Offset(topX, topY + spH), spindlePaint);
+      final ltX = _lerp(leftRailEnd.dx, leftRailStart.dx, f);
+      final ltY = _lerp(leftRailEnd.dy, leftRailStart.dy, f);
+      final rtX = _lerp(rightRailEnd.dx, rightRailStart.dx, f);
+      final rtY = _lerp(rightRailEnd.dy, rightRailStart.dy, f);
+      final spH = h * 0.09 * (1.0 - f * 0.45);
+      _drawSpindle(canvas, ltX, ltY, spH);
+      _drawSpindle(canvas, rtX, rtY, spH);
     }
 
-    // ── 7. Newel posts ─────────────────────────────────────────────────────
-    final newelPaint = Paint()..color = _newelPost;
-    final postW = w * 0.025;
-    final postH = h * 0.14;
+    // ── 8. Newel posts ─────────────────────────────────────────────────────
+    _drawNewelPost(canvas, leftRailStart.dx, leftRailStart.dy, w * 0.028, h);
+    _drawNewelPost(canvas, rightRailStart.dx, rightRailStart.dy, w * 0.028, h);
 
+    // ── 9. Picture frame with gold border on right wall ───────────────────
+    final frameL  = w * 0.77;
+    final frameT  = h * 0.26;
+    final frameW  = w * 0.10;
+    final frameHt = h * 0.17;
+
+    // Subtle glow halo behind frame
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-        Rect.fromLTWH(leftRailStart.dx - postW / 2, leftRailStart.dy - postH, postW, postH),
-        const Radius.circular(3),
+        Rect.fromLTWH(frameL - 6, frameT - 6, frameW + 12, frameHt + 12),
+        const Radius.circular(6),
       ),
-      newelPaint,
+      Paint()
+        ..color = const Color(0x33D4A853)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 10),
     );
+    // Gold outer frame
     canvas.drawRRect(
       RRect.fromRectAndRadius(
-        Rect.fromLTWH(rightRailStart.dx - postW / 2, rightRailStart.dy - postH, postW, postH),
+        Rect.fromLTWH(frameL, frameT, frameW, frameHt),
         const Radius.circular(3),
       ),
-      newelPaint,
+      Paint()..color = const Color(0xFFD4A853),
+    );
+    // Inner dark bevel
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(frameL + 4, frameT + 4, frameW - 8, frameHt - 8),
+        const Radius.circular(2),
+      ),
+      Paint()..color = const Color(0xFF1E1008),
+    );
+    // Dark painting content
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(frameL + 7, frameT + 7, frameW - 14, frameHt - 14),
+        const Radius.circular(1),
+      ),
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: const [Color(0xFF2A3040), Color(0xFF0A1020)],
+        ).createShader(
+          Rect.fromLTWH(frameL + 7, frameT + 7, frameW - 14, frameHt - 14),
+        ),
     );
 
-    // ── 8. Picture frame on right wall ────────────────────────────────────
-    final frameL = w * 0.78;
-    final frameT = h * 0.28;
-    final frameW = w * 0.09;
-    final frameHt = h * 0.12;
-
-    canvas.drawRect(Rect.fromLTWH(frameL, frameT, frameW, frameHt), Paint()..color = _frameOuter);
-    canvas.drawRect(
-      Rect.fromLTWH(frameL + w * 0.01, frameT + h * 0.015, frameW - w * 0.02, frameHt - h * 0.03),
-      Paint()..color = _frameInner,
+    // ── 10. Wall sconce glow (light source on left wall) ──────────────────
+    final sconceX = w * 0.14;
+    final sconceY = h * 0.37;
+    // Warm ambient glow (large soft bloom)
+    canvas.drawCircle(
+      Offset(sconceX, sconceY),
+      h * 0.24,
+      Paint()
+        ..shader = RadialGradient(
+          colors: const [Color(0x55FEC95A), Color(0x22FEC95A), Color(0x00FEC95A)],
+          stops: const [0.0, 0.40, 1.0],
+        ).createShader(
+          Rect.fromCircle(center: Offset(sconceX, sconceY), radius: h * 0.24),
+        ),
+    );
+    // Sconce bracket
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(sconceX - 7, sconceY, 14, h * 0.09),
+        const Radius.circular(3),
+      ),
+      Paint()..color = const Color(0xFF4A2E10),
+    );
+    // Lamp globe
+    canvas.drawCircle(
+      Offset(sconceX, sconceY - h * 0.012),
+      h * 0.026,
+      Paint()..color = const Color(0xFFFFE890),
     );
 
-    // ── 9. Floor landing at bottom ────────────────────────────────────────
+    // ── 11. Floating dust motes in the light shaft ────────────────────────
+    final rng = math.Random(42);
+    final motePaint = Paint()..color = const Color(0x55FEC95A);
+    for (int i = 0; i < 22; i++) {
+      final mx = w * (0.40 + rng.nextDouble() * 0.50);
+      final my = h * (rng.nextDouble() * 0.50);
+      final mr = 0.8 + rng.nextDouble() * 2.2;
+      canvas.drawCircle(Offset(mx, my), mr, motePaint);
+    }
+
+    // ── 12. Floor landing — dark rich wood ────────────────────────────────
     canvas.drawRect(
       Rect.fromLTWH(0, stairBottom, w, h - stairBottom),
       Paint()
         ..shader = LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: [_treadTop, _treadTop.withAlpha(200)],
+          colors: const [Color(0xFF3A2010), Color(0xFF1A0E08)],
         ).createShader(Rect.fromLTWH(0, stairBottom, w, h - stairBottom)),
     );
+    // Floor reflected light sheen
+    canvas.drawRect(
+      Rect.fromLTWH(w * 0.22, stairBottom, w * 0.56, (h - stairBottom) * 0.4),
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: const [Color(0x22FEC95A), Color(0x00FEC95A)],
+        ).createShader(
+          Rect.fromLTWH(w * 0.22, stairBottom, w * 0.56, (h - stairBottom) * 0.4),
+        ),
+    );
+  }
 
+  void _drawSpindle(Canvas canvas, double cx, double topY, double height) {
+    canvas.drawLine(
+      Offset(cx, topY),
+      Offset(cx, topY + height),
+      Paint()
+        ..color = _spindle
+        ..strokeWidth = 4.0
+        ..strokeCap = StrokeCap.round,
+    );
+    // Inner highlight
+    canvas.drawLine(
+      Offset(cx, topY + height * 0.2),
+      Offset(cx, topY + height * 0.65),
+      Paint()
+        ..color = const Color(0x226B4020)
+        ..strokeWidth = 1.5,
+    );
+  }
+
+  void _drawNewelPost(
+    Canvas canvas,
+    double cx,
+    double bottomY,
+    double postW,
+    double totalH,
+  ) {
+    final postH = totalH * 0.17;
+    // Post body
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(cx - postW / 2, bottomY - postH, postW, postH),
+        Radius.circular(postW * 0.12),
+      ),
+      Paint()..color = _newelPost,
+    );
+    // Decorative cap (sphere-like)
+    canvas.drawOval(
+      Rect.fromCenter(
+        center: Offset(cx, bottomY - postH - postW * 0.40),
+        width: postW * 1.35,
+        height: postW * 1.35,
+      ),
+      Paint()..color = const Color(0xFF2A1608),
+    );
+    // Cap highlight
+    canvas.drawOval(
+      Rect.fromCenter(
+        center: Offset(cx - postW * 0.15, bottomY - postH - postW * 0.52),
+        width: postW * 0.50,
+        height: postW * 0.50,
+      ),
+      Paint()..color = const Color(0x446B4020),
+    );
   }
 
   static double _lerp(double a, double b, double t) => a + (b - a) * t;
@@ -319,9 +490,6 @@ class _Panel6OpeningScreenState extends State<Panel6OpeningScreen>
   late AnimationController _endFadeCtrl;
   late Animation<double> _endFade;
 
-  // ── End banner opacity ────────────────────────────────────────────────
-  late AnimationController _endBannerCtrl;
-  late Animation<double> _endBanner;
 
   _ScriptEntry get _currentEntry => _openingScript[_beatIndex];
 
@@ -362,12 +530,6 @@ class _Panel6OpeningScreenState extends State<Panel6OpeningScreen>
     );
     _endFade = CurvedAnimation(parent: _endFadeCtrl, curve: Curves.easeIn);
 
-    _endBannerCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-    );
-    _endBanner = CurvedAnimation(parent: _endBannerCtrl, curve: Curves.easeIn);
-
     _processBeat();
   }
 
@@ -379,7 +541,6 @@ class _Panel6OpeningScreenState extends State<Panel6OpeningScreen>
     _sfxCtrl.dispose();
     _flashCtrl.dispose();
     _endFadeCtrl.dispose();
-    _endBannerCtrl.dispose();
     super.dispose();
   }
 
@@ -533,6 +694,34 @@ class _Panel6OpeningScreenState extends State<Panel6OpeningScreen>
                 ),
               ),
 
+              // ── Edge vignette
+              IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                      center: Alignment.center,
+                      radius: 1.3,
+                      colors: const [Colors.transparent, Color(0xAA000000)],
+                    ),
+                  ),
+                  child: const SizedBox.expand(),
+                ),
+              ),
+
+              // ── Location badge (top-left)
+              const Positioned(
+                top: 20,
+                left: 20,
+                child: _LocationBadge(label: 'Home  ·  Staircase'),
+              ),
+
+              // ── Panel chip (top-right)
+              const Positioned(
+                top: 20,
+                right: 20,
+                child: _PanelChip(label: 'P6'),
+              ),
+
               // ── VN text box
               if (!_endSceneStarted) _buildTextBox(),
 
@@ -564,23 +753,6 @@ class _Panel6OpeningScreenState extends State<Panel6OpeningScreen>
                 child: FadeTransition(
                   opacity: _endFade,
                   child: Container(color: Colors.black),
-                ),
-              ),
-
-              // ── "End of Scene" banner
-              IgnorePointer(
-                child: FadeTransition(
-                  opacity: _endBanner,
-                  child: Center(
-                    child: Text(
-                      'End of Scene',
-                      style: AppTextStyles.headlineMedium.copyWith(
-                        color: AppColors.accentLight,
-                        letterSpacing: 3,
-                        fontStyle: FontStyle.italic,
-                      ),
-                    ),
-                  ),
                 ),
               ),
             ],
@@ -648,6 +820,80 @@ class _Panel6OpeningScreenState extends State<Panel6OpeningScreen>
               fontSize: 10,
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  LOCATION BADGE
+// ════════════════════════════════════════════════════════════════════════════
+
+class _LocationBadge extends StatelessWidget {
+  const _LocationBadge({required this.label});
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+      decoration: BoxDecoration(
+        color: const Color(0xBB060318),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.accent.withAlpha(100), width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.accent.withAlpha(25),
+            blurRadius: 10,
+            spreadRadius: 1,
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.location_on_outlined,
+              color: AppColors.accentLight, size: 12),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: AppTextStyles.labelSmall.copyWith(
+              color: AppColors.textSecondary,
+              fontSize: 11,
+              letterSpacing: 0.8,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  PANEL CHIP
+// ════════════════════════════════════════════════════════════════════════════
+
+class _PanelChip extends StatelessWidget {
+  const _PanelChip({required this.label});
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: AppColors.accent.withAlpha(25),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.accent.withAlpha(70)),
+      ),
+      child: Text(
+        label,
+        style: AppTextStyles.labelSmall.copyWith(
+          color: AppColors.accent,
+          fontSize: 10,
+          letterSpacing: 1.8,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );

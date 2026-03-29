@@ -57,36 +57,29 @@ const String _letterBody =
 class _WindowStreetPainter extends CustomPainter {
   const _WindowStreetPainter();
 
-  static const Color _wallTop = Color(0xFFF0E6D0);
-  static const Color _wallBottom = Color(0xFFE0D0B0);
-  static const Color _wallSide = Color(0xFFD8C8A0);
-  static const Color _frameColor = Color(0xFFF2F0E8);
-  static const Color _frameShadow = Color(0xFF9A8870);
-  static const Color _sillColor = Color(0xFFD4B483);
-  static const Color _skyTop = Color(0xFF87CEEA);
-  static const Color _skyBottom = Color(0xFFD4ECF7);
-  static const Color _hillA = Color(0xFF7BA05B);
-  static const Color _hillB = Color(0xFF567A3C);
-  static const Color _sidewalkColor = Color(0xFFCCCABE);
-  static const Color _streetColor = Color(0xFFB0ADA0);
-  static const Color _curtainColor = Color(0xFFD4A86C);
+  // Interior palette — warm Victorian morning atmosphere
+  static const Color _wallTop    = Color(0xFFB8904E); // warm amber-ochre
+  static const Color _wallBottom = Color(0xFF6B4818); // deep warm brown
+  static const Color _wallSide   = Color(0xFF1A0C04); // deep side shadow
+  static const Color _frameColor = Color(0xFFF0EAD6); // aged white frame
+  static const Color _sillColor  = Color(0xFFD4B070); // warm oak sill
+  static const Color _sillShadow = Color(0xFF6A5020); // sill shadow below
+  static const Color _skyTop     = Color(0xFF4A6080); // deep blue zenith
+  static const Color _skyMid     = Color(0xFF88A8C0); // mid-sky blue
+  static const Color _skyGlow    = Color(0xFFD4804A); // warm orange horizon
+  static const Color _sidewalk   = Color(0xFFAA9870); // morning pavement
+  static const Color _street     = Color(0xFF706850); // darker road
+  static const Color _curtainBase= Color(0xFF8B4A2A); // rich burgundy curtain
+  static const Color _curtainMid = Color(0xFFBC6040); // lighter curtain fold
+  static const Color _curtainDark= Color(0xFF5A2818); // deep fold shadow
 
   static const List<Color> _buildingColors = [
-    Color(0xFFC07050),
-    Color(0xFFF0E0C0),
-    Color(0xFFD07030),
-    Color(0xFFF5F0E0),
-    Color(0xFFBB8060),
-  ];
-
-  static const List<Color> _peopleColors = [
-    Color(0xFF883322),
-    Color(0xFF224488),
-    Color(0xFF338833),
-    Color(0xFF884488),
-    Color(0xFF885533),
-    Color(0xFF334488),
-    Color(0xFF883344),
+    Color(0xFF7A4830), // brick red
+    Color(0xFFD8C098), // light stone
+    Color(0xFF6A5A4A), // grey stone
+    Color(0xFF9A7050), // warm sandstone
+    Color(0xFF5A4838), // dark grey-brown
+    Color(0xFFB89070), // aged terracotta
   ];
 
   @override
@@ -94,7 +87,7 @@ class _WindowStreetPainter extends CustomPainter {
     final w = size.width;
     final h = size.height;
 
-    // ── 1. Wall background ─────────────────────────────────────────────────
+    // ── 1. Interior wall — warm Victorian morning atmosphere ──────────────
     canvas.drawRect(
       Rect.fromLTWH(0, 0, w, h),
       Paint()
@@ -104,46 +97,77 @@ class _WindowStreetPainter extends CustomPainter {
           colors: const [_wallTop, _wallBottom],
         ).createShader(Rect.fromLTWH(0, 0, w, h)),
     );
-
-    // Side shadows
+    // Deep side shadow wings
     canvas.drawRect(
-      Rect.fromLTWH(0, 0, w * 0.10, h),
+      Rect.fromLTWH(0, 0, w * 0.14, h),
       Paint()
         ..shader = LinearGradient(
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
           colors: [_wallSide, _wallSide.withAlpha(0)],
-        ).createShader(Rect.fromLTWH(0, 0, w * 0.10, h)),
+        ).createShader(Rect.fromLTWH(0, 0, w * 0.14, h)),
     );
     canvas.drawRect(
-      Rect.fromLTWH(w * 0.90, 0, w * 0.10, h),
+      Rect.fromLTWH(w * 0.86, 0, w * 0.14, h),
       Paint()
         ..shader = LinearGradient(
           begin: Alignment.centerRight,
           end: Alignment.centerLeft,
           colors: [_wallSide, _wallSide.withAlpha(0)],
-        ).createShader(Rect.fromLTWH(w * 0.90, 0, w * 0.10, h)),
+        ).createShader(Rect.fromLTWH(w * 0.86, 0, w * 0.14, h)),
     );
 
-    // ── 2. Window dimensions ───────────────────────────────────────────────
-    final winL = w * 0.06;
-    final winR = w * 0.94;
-    final winT = h * 0.03;
-    final winB = h * 0.62;
+    // ── 2. Window dimensions (elegant narrow Victorian) ──────────────────
+    final winL = w * 0.30;
+    final winR = w * 0.70;
+    final winT = h * 0.02;
+    final winB = h * 0.67;
     final winW = winR - winL;
     final winH = winB - winT;
-    final frameThick = w * 0.018;
+    final frameThick = w * 0.013;
 
-    // ── 3. Window outer shadow ──────────────────────────────────────────────
-    canvas.drawRRect(
-      RRect.fromRectAndRadius(
-        Rect.fromLTRB(winL - 2, winT - 2, winR + 2, winB + 2),
-        const Radius.circular(4),
-      ),
-      Paint()..color = _frameShadow,
+    // ── 3. Warm morning light spill onto floor ────────────────────────────
+    canvas.drawPath(
+      Path()
+        ..moveTo(winL + frameThick, winB - frameThick)
+        ..lineTo(winR - frameThick, winB - frameThick)
+        ..lineTo(w * 0.88, h)
+        ..lineTo(w * 0.12, h)
+        ..close(),
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: const [Color(0x55FFC060), Color(0x00FFC060)],
+        ).createShader(Rect.fromLTWH(0, winB, w, h - winB)),
     );
 
-    // ── 4. Window frame ────────────────────────────────────────────────────
+    // ── 4. Curtain rod above window ───────────────────────────────────────
+    final rodY = winT - h * 0.022;
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(winL - w * 0.06, rodY - 4, winW + w * 0.12, 9),
+        const Radius.circular(4),
+      ),
+      Paint()..color = const Color(0xFF4A3010),
+    );
+    // Gold finials at rod ends
+    for (final x in [winL - w * 0.07, winR + w * 0.07]) {
+      canvas.drawCircle(Offset(x, rodY), 7, Paint()..color = const Color(0xFFD4A853));
+    }
+
+    // ── 5. Window frame drop shadow ───────────────────────────────────────
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTRB(winL - 4, winT - 4, winR + 4, winB + 4),
+        const Radius.circular(6),
+      ),
+      Paint()
+        ..color = const Color(0x55000000)
+        ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 14),
+    );
+
+    // ── 6. Window outer frame ─────────────────────────────────────────────
     canvas.drawRRect(
       RRect.fromRectAndRadius(
         Rect.fromLTRB(winL, winT, winR, winB),
@@ -152,268 +176,381 @@ class _WindowStreetPainter extends CustomPainter {
       Paint()..color = _frameColor,
     );
 
-    // ── 5. Glass area with outdoor scene (clipped) ─────────────────────────
+    // ── 7. Glass area — clipped outdoor morning scene ─────────────────────
     final glassL = winL + frameThick;
     final glassR = winR - frameThick;
     final glassT = winT + frameThick;
-    final glassB = winB - frameThick;
+    final glassB = winB - frameThick / 2;
     final glassW = glassR - glassL;
     final glassH = glassB - glassT;
 
     canvas.save();
-    canvas.clipRect(Rect.fromLTWH(glassL, glassT, glassW, glassH));
+    canvas.clipRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTRB(glassL, glassT, glassR, glassB),
+        const Radius.circular(2),
+      ),
+    );
 
-    // Sky gradient
+    // Sky — golden morning 3-stop gradient
     canvas.drawRect(
-      Rect.fromLTWH(glassL, glassT, glassW, glassH * 0.48),
+      Rect.fromLTWH(glassL, glassT, glassW, glassH * 0.58),
       Paint()
         ..shader = LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: const [_skyTop, _skyBottom],
-        ).createShader(Rect.fromLTWH(glassL, glassT, glassW, glassH * 0.48)),
+          colors: const [_skyTop, _skyMid, _skyGlow],
+          stops: const [0.0, 0.50, 1.0],
+        ).createShader(Rect.fromLTWH(glassL, glassT, glassW, glassH * 0.58)),
     );
 
-    // Hills at horizon
-    final horizonY = glassT + glassH * 0.40;
-    canvas.drawOval(
-      Rect.fromCenter(
-        center: Offset(glassL + glassW * 0.25, horizonY + 18),
-        width: glassW * 0.60,
-        height: 70,
-      ),
-      Paint()..color = _hillA,
-    );
-    canvas.drawOval(
-      Rect.fromCenter(
-        center: Offset(glassL + glassW * 0.65, horizonY + 8),
-        width: glassW * 0.55,
-        height: 62,
-      ),
-      Paint()..color = _hillB,
-    );
-    canvas.drawOval(
-      Rect.fromCenter(
-        center: Offset(glassL + glassW * 0.92, horizonY + 22),
-        width: glassW * 0.44,
-        height: 55,
-      ),
-      Paint()..color = _hillA,
+    // Sunrise haze / sun glow bloom
+    final sunX = glassL + glassW * 0.62;
+    final sunY = glassT + glassH * 0.42;
+    canvas.drawCircle(
+      Offset(sunX, sunY),
+      glassW * 0.38,
+      Paint()
+        ..shader = RadialGradient(
+          colors: const [Color(0x88FFD060), Color(0x44FFA030), Color(0x00FF8020)],
+          stops: const [0.0, 0.4, 1.0],
+        ).createShader(
+          Rect.fromCircle(center: Offset(sunX, sunY), radius: glassW * 0.38),
+        ),
     );
 
-    // Buildings
-    final buildingBaseY = glassT + glassH * 0.70;
-    final streetTopY = glassT + glassH * 0.82;
+    // ── Victorian cityscape ───────────────────────────────────────────────
+    final horizY     = glassT + glassH * 0.44;
+    final streetTopY = glassT + glassH * 0.78;
+
     const buildings = [
-      (0.00, 0.19, 0.78), // (xFrac, widthFrac, heightFrac)
-      (0.20, 0.17, 0.92),
-      (0.38, 0.23, 0.66),
-      (0.62, 0.21, 0.86),
-      (0.84, 0.16, 0.72),
+      (0.00, 0.19, 0.95),
+      (0.20, 0.15, 0.70),
+      (0.36, 0.22, 0.88),
+      (0.59, 0.18, 0.62),
+      (0.78, 0.22, 0.80),
     ];
 
     for (int i = 0; i < buildings.length; i++) {
       final (xf, wf, hf) = buildings[i];
-      final bx = glassL + glassW * xf;
-      final bw = glassW * wf;
-      final bh = (streetTopY - buildingBaseY) * hf;
-      final bTop = streetTopY - bh;
+      final bx    = glassL + glassW * xf;
+      final bw    = glassW * wf;
+      final bh    = (streetTopY - horizY) * hf;
+      final bTop  = streetTopY - bh;
+      final bColor = _buildingColors[i % _buildingColors.length];
 
+      // Building body with top-to-bottom gradient
       canvas.drawRect(
         Rect.fromLTWH(bx, bTop, bw, bh),
-        Paint()..color = _buildingColors[i % _buildingColors.length],
+        Paint()
+          ..shader = LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [bColor, Color.lerp(bColor, const Color(0xFF1A1010), 0.35)!],
+          ).createShader(Rect.fromLTWH(bx, bTop, bw, bh)),
       );
 
-      // Windows grid (2 cols × 3 rows)
+      // Cornice ledge at top
+      canvas.drawRect(
+        Rect.fromLTWH(bx - 2, bTop, bw + 4, bh * 0.055),
+        Paint()..color = Color.lerp(bColor, Colors.white, 0.15)!,
+      );
+
+      // Window grid (3 rows × 2 cols)
       for (int row = 0; row < 3; row++) {
         for (int col = 0; col < 2; col++) {
+          final wx = bx + bw * (0.14 + col * 0.43);
+          final wy = bTop + bh * (0.11 + row * 0.25);
+          final ww = bw * 0.26;
+          final wh = bh * 0.16;
+          // Window dark base
           canvas.drawRect(
-            Rect.fromLTWH(
-              bx + bw * 0.15 + col * (bw * 0.40),
-              bTop + bh * 0.12 + row * (bh * 0.24),
-              bw * 0.28,
-              bh * 0.14,
-            ),
-            Paint()..color = const Color(0x804488AA),
+            Rect.fromLTWH(wx, wy, ww, wh),
+            Paint()..color = const Color(0xFF443322),
+          );
+          // Warm golden glow in lit windows
+          if ((i + row + col) % 3 != 0) {
+            canvas.drawRect(
+              Rect.fromLTWH(wx + 1, wy + 1, ww - 2, wh - 2),
+              Paint()..color = const Color(0xAAFFCC66),
+            );
+          }
+          // Window frame lines
+          canvas.drawRect(
+            Rect.fromLTWH(wx, wy, ww, wh),
+            Paint()
+              ..color = const Color(0xFFC0A070)
+              ..style = PaintingStyle.stroke
+              ..strokeWidth = 1.5,
           );
         }
       }
 
-      // Awning
-      canvas.drawRect(
-        Rect.fromLTWH(
-          bx + bw * 0.04,
-          streetTopY - bh * 0.12,
-          bw * 0.92,
-          bh * 0.08,
-        ),
-        Paint()..color = _buildingColors[(i + 2) % _buildingColors.length],
-      );
+      // Chimneys
+      final chimneyCount = (i % 2) + 1;
+      for (int c = 0; c < chimneyCount; c++) {
+        final chX = bx + bw * (0.25 + c * 0.50);
+        final chH = bh * 0.11;
+        canvas.drawRect(
+          Rect.fromLTWH(chX - 5, bTop - chH, 10, chH),
+          Paint()..color = Color.lerp(bColor, Colors.black, 0.25)!,
+        );
+        // Chimney cap
+        canvas.drawRect(
+          Rect.fromLTWH(chX - 7, bTop - chH - 4, 14, 5),
+          Paint()..color = const Color(0xFF4A3828),
+        );
+        // Smoke wisp
+        canvas.drawOval(
+          Rect.fromCenter(
+            center: Offset(chX, bTop - chH - 16),
+            width: 12,
+            height: 20,
+          ),
+          Paint()..color = const Color(0x33A8A0A0),
+        );
+      }
     }
 
-    // Sidewalk
+    // Ground / sidewalk
     canvas.drawRect(
       Rect.fromLTWH(glassL, streetTopY, glassW, glassH - (streetTopY - glassT)),
-      Paint()..color = _sidewalkColor,
+      Paint()..color = _sidewalk,
     );
-    // Road strip
     canvas.drawRect(
       Rect.fromLTWH(
         glassL,
-        streetTopY + (glassB - streetTopY) * 0.28,
+        streetTopY + (glassH - (streetTopY - glassT)) * 0.22,
         glassW,
-        (glassB - streetTopY) * 0.50,
+        (glassH - (streetTopY - glassT)) * 0.55,
       ),
-      Paint()..color = _streetColor,
+      Paint()..color = _street,
     );
 
-    // People silhouettes
+    // Ground morning mist (fog layer)
+    canvas.drawRect(
+      Rect.fromLTWH(glassL, streetTopY - 10, glassW, glassH * 0.20),
+      Paint()
+        ..shader = LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          colors: const [
+            Color(0x00D8C090),
+            Color(0x66D8C090),
+            Color(0x00D8C090),
+          ],
+          stops: const [0.0, 0.5, 1.0],
+        ).createShader(
+          Rect.fromLTWH(glassL, streetTopY - 10, glassW, glassH * 0.20),
+        ),
+    );
+
+    // People silhouettes — varied sizes and hues
     const people = [
-      (0.07, 0.86), (0.16, 0.88), (0.27, 0.85), (0.38, 0.87),
-      (0.50, 0.86), (0.60, 0.88), (0.71, 0.85), (0.81, 0.87),
-      (0.91, 0.86), (0.13, 0.92), (0.33, 0.91), (0.59, 0.92),
-      (0.76, 0.90), (0.45, 0.93), (0.22, 0.89), (0.64, 0.90),
+      (0.08, 0.85), (0.16, 0.87), (0.26, 0.84), (0.37, 0.86),
+      (0.49, 0.85), (0.58, 0.87), (0.68, 0.84), (0.79, 0.86),
+      (0.90, 0.85), (0.13, 0.91), (0.32, 0.90), (0.55, 0.92),
+      (0.74, 0.90), (0.44, 0.93),
+    ];
+    final rng = math.Random(7);
+    const bodyColors = [
+      Color(0xFF2A1A0A), Color(0xFF1A2040),
+      Color(0xFF301808), Color(0xFF1A3020),
     ];
     for (int i = 0; i < people.length; i++) {
       final (px, py) = people[i];
       final personX = glassL + glassW * px;
       final personY = glassT + glassH * py;
-      final personH = glassH * 0.055;
+      final personH = glassH * (0.048 + rng.nextDouble() * 0.015);
+      final bodyColor = bodyColors[i % bodyColors.length];
+      // Body
       canvas.drawOval(
         Rect.fromCenter(
           center: Offset(personX, personY),
-          width: personH * 0.52,
+          width: personH * 0.45,
           height: personH,
         ),
-        Paint()..color = _peopleColors[i % _peopleColors.length],
+        Paint()..color = bodyColor,
+      );
+      // Head
+      canvas.drawCircle(
+        Offset(personX, personY - personH * 0.62),
+        personH * 0.18,
+        Paint()..color = bodyColor,
       );
     }
 
-    // Sky brightness at top of glass
+    // Glass warmth overlay
     canvas.drawRect(
-      Rect.fromLTWH(glassL, glassT, glassW, glassH * 0.18),
+      Rect.fromLTWH(glassL, glassT, glassW, glassH),
+      Paint()..color = const Color(0x0BFFCC80),
+    );
+    // Sky brightness at top
+    canvas.drawRect(
+      Rect.fromLTWH(glassL, glassT, glassW, glassH * 0.14),
       Paint()
         ..shader = LinearGradient(
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
-          colors: const [Color(0x44FFFFFF), Color(0x00FFFFFF)],
-        ).createShader(Rect.fromLTWH(glassL, glassT, glassW, glassH * 0.18)),
-    );
-
-    // Glass tint overlay (subtle blue reflection)
-    canvas.drawRect(
-      Rect.fromLTWH(glassL, glassT, glassW, glassH),
-      Paint()..color = const Color(0x0A87CEEA),
+          colors: const [Color(0x33FFFFFF), Color(0x00FFFFFF)],
+        ).createShader(Rect.fromLTWH(glassL, glassT, glassW, glassH * 0.14)),
     );
 
     canvas.restore();
 
-    // ── 6. Curtains ────────────────────────────────────────────────────────
-    final curtainPaint = Paint()..color = _curtainColor;
-    final leftCurtainPath = Path()
-      ..moveTo(winL - 2, winT)
-      ..lineTo(winL + winW * 0.13, winT)
-      ..lineTo(winL + winW * 0.09, winT + winH * 0.42)
-      ..lineTo(winL + winW * 0.15, winT + winH * 0.72)
-      ..lineTo(winL, winB)
-      ..lineTo(winL - 2, winB)
-      ..close();
-    canvas.drawPath(leftCurtainPath, curtainPaint);
-
-    final rightCurtainPath = Path()
-      ..moveTo(winR + 2, winT)
-      ..lineTo(winR - winW * 0.13, winT)
-      ..lineTo(winR - winW * 0.09, winT + winH * 0.42)
-      ..lineTo(winR - winW * 0.15, winT + winH * 0.72)
-      ..lineTo(winR, winB)
-      ..lineTo(winR + 2, winB)
-      ..close();
-    canvas.drawPath(rightCurtainPath, curtainPaint);
-
-    // Curtain fold shadow
-    canvas.drawPath(
-      leftCurtainPath,
-      Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
-          colors: const [Color(0x44000000), Color(0x00000000)],
-        ).createShader(Rect.fromLTWH(winL, winT, winW * 0.15, winH)),
-    );
-
-    // ── 7. Window crossbars ───────────────────────────────────────────────
+    // ── 8. Window crossbars (Victorian 6-pane: 2 rows × 3 cols) ──────────
     final barPaint = Paint()..color = _frameColor;
-    // Horizontal divider
+    final barThick = frameThick * 0.55;
+    // Horizontal mid-bar
     canvas.drawRect(
-      Rect.fromLTWH(winL, glassT + glassH * 0.55, winW, frameThick * 0.8),
+      Rect.fromLTWH(winL, glassT + glassH * 0.50, winW, barThick),
       barPaint,
     );
-    // Vertical divider
+    // Two vertical bars
     canvas.drawRect(
-      Rect.fromLTWH(winL + winW * 0.50 - frameThick * 0.4, winT, frameThick * 0.8, winH),
+      Rect.fromLTWH(winL + winW * 0.335 - barThick / 2, winT, barThick, winH),
+      barPaint,
+    );
+    canvas.drawRect(
+      Rect.fromLTWH(winL + winW * 0.665 - barThick / 2, winT, barThick, winH),
       barPaint,
     );
 
-    // ── 8. Window sill ────────────────────────────────────────────────────
-    canvas.drawRect(
-      Rect.fromLTWH(winL - 4, winB, winW + 8, h * 0.045),
+    // ── 9. Curtains (draped, folded, burgundy) ────────────────────────────
+    _drawCurtain(canvas, winL, winT, winB, winW, true);
+    _drawCurtain(canvas, winR, winT, winB, winW, false);
+
+    // ── 10. Window sill (raised oak) ──────────────────────────────────────
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(winL - 10, winB, winW + 20, h * 0.042),
+        const Radius.circular(3),
+      ),
       Paint()..color = _sillColor,
     );
+    // Sill shadow below
+    canvas.drawRRect(
+      RRect.fromRectAndRadius(
+        Rect.fromLTWH(winL - 10, winB + h * 0.038, winW + 20, h * 0.010),
+        const Radius.circular(2),
+      ),
+      Paint()..color = _sillShadow,
+    );
 
-    // ── 9. Potted plants on sill ──────────────────────────────────────────
-    const plantXFracs = [0.18, 0.40, 0.62, 0.83];
-    const plantColors = [
-      Color(0xFF4A7A2E),
-      Color(0xFF5A8C3E),
-      Color(0xFF3A6A20),
-    ];
+    // ── 11. Potted plants on sill ─────────────────────────────────────────
+    const plantXFracs = [0.20, 0.50, 0.80];
     for (int i = 0; i < plantXFracs.length; i++) {
-      final px = winL + winW * plantXFracs[i];
-      final py = winB;
-      // Pot
-      canvas.drawOval(
-        Rect.fromCenter(center: Offset(px, py + h * 0.026), width: 24, height: 15),
-        Paint()..color = const Color(0xFF996644),
-      );
-      // Foliage
-      canvas.drawCircle(Offset(px, py), 17, Paint()..color = plantColors[0]);
-      canvas.drawCircle(
-        Offset(px - 11, py + 5),
-        12,
-        Paint()..color = plantColors[1],
-      );
-      canvas.drawCircle(
-        Offset(px + 11, py + 5),
-        12,
-        Paint()..color = plantColors[2],
-      );
-      // Flower accent
-      canvas.drawCircle(
-        Offset(px - 3, py - 11),
-        4,
-        Paint()..color = const Color(0xFFFF6688),
-      );
+      _drawPlant(canvas, winL + winW * plantXFracs[i], winB, i);
     }
 
-    // ── 10. Ambient light bloom from window ───────────────────────────────
+    // ── 12. Ambient window light bloom on surrounding wall ────────────────
     canvas.drawRect(
-      Rect.fromLTWH(winL, winT, winW, winH),
+      Rect.fromLTWH(winL - winW * 0.20, winT, winW * 1.40, winH),
       Paint()
         ..shader = RadialGradient(
           center: Alignment.center,
-          radius: 0.80,
-          colors: const [Color(0x22FFFFFF), Color(0x00FFFFFF)],
-        ).createShader(Rect.fromLTWH(winL, winT, winW, winH)),
+          radius: 0.75,
+          colors: const [Color(0x18FFD080), Color(0x00FFD080)],
+        ).createShader(
+          Rect.fromLTWH(winL - winW * 0.20, winT, winW * 1.40, winH),
+        ),
     );
 
-    // ── 11. Inner frame edge shadow ───────────────────────────────────────
+    // ── 13. Inner frame edge shadows ──────────────────────────────────────
     canvas.drawRect(
-      Rect.fromLTRB(glassL, glassT, glassR, glassT + 5),
-      Paint()..color = const Color(0x22000000),
+      Rect.fromLTRB(glassL, glassT, glassR, glassT + 6),
+      Paint()..color = const Color(0x33000000),
     );
     canvas.drawRect(
-      Rect.fromLTRB(glassL, glassT, glassL + 5, glassB),
+      Rect.fromLTRB(glassL, glassT, glassL + 6, glassB),
       Paint()..color = const Color(0x22000000),
+    );
+  }
+
+  void _drawCurtain(
+    Canvas canvas,
+    double anchorX,
+    double top,
+    double bottom,
+    double winW,
+    bool isLeft,
+  ) {
+    final sign = isLeft ? 1.0 : -1.0;
+    final curtainWidth = winW * 0.20;
+
+    const foldT   = [0.0, 0.28, 0.55, 0.82, 1.0];
+    const foldOff = [0.0, 0.55, 0.22, 0.68, 0.05];
+
+    for (int fold = 0; fold < foldT.length - 1; fold++) {
+      final yTop   = top + (bottom - top) * foldT[fold];
+      final yBot   = top + (bottom - top) * foldT[fold + 1];
+      final xEdgeT = anchorX + sign * curtainWidth * foldOff[fold];
+      final xEdgeB = anchorX + sign * curtainWidth * foldOff[fold + 1];
+
+      final foldPath = Path()
+        ..moveTo(anchorX, yTop)
+        ..lineTo(xEdgeT, yTop)
+        ..lineTo(xEdgeB, yBot)
+        ..lineTo(anchorX, yBot)
+        ..close();
+
+      canvas.drawPath(
+        foldPath,
+        Paint()..color = fold.isEven ? _curtainBase : _curtainMid,
+      );
+    }
+    // Outer edge shadow seam
+    canvas.drawLine(
+      Offset(anchorX, top),
+      Offset(anchorX, bottom),
+      Paint()
+        ..color = _curtainDark
+        ..strokeWidth = 3,
+    );
+  }
+
+  void _drawPlant(Canvas canvas, double cx, double sillY, int index) {
+    const potColors = [
+      Color(0xFFC06040),
+      Color(0xFF8B5A30),
+      Color(0xFFD4885A),
+    ];
+    const leafPairs = [
+      [Color(0xFF3A7020), Color(0xFF4A8830)],
+      [Color(0xFF285A18), Color(0xFF388028)],
+      [Color(0xFF507830), Color(0xFF608840)],
+    ];
+
+    const potH = 16.0;
+    const potW = 22.0;
+
+    // Pot body (trapezoidal)
+    canvas.drawPath(
+      Path()
+        ..moveTo(cx - potW * 0.42, sillY + 2)
+        ..lineTo(cx + potW * 0.42, sillY + 2)
+        ..lineTo(cx + potW * 0.38, sillY + potH)
+        ..lineTo(cx - potW * 0.38, sillY + potH)
+        ..close(),
+      Paint()..color = potColors[index % potColors.length],
+    );
+    // Pot rim
+    canvas.drawOval(
+      Rect.fromCenter(center: Offset(cx, sillY + 2), width: potW, height: 6),
+      Paint()..color = const Color(0xFF7A4020),
+    );
+    // Foliage cluster
+    final lc = leafPairs[index % leafPairs.length];
+    canvas.drawCircle(Offset(cx, sillY - 12), 13, Paint()..color = lc[0]);
+    canvas.drawCircle(Offset(cx - 10, sillY - 6), 9, Paint()..color = lc[1]);
+    canvas.drawCircle(Offset(cx + 10, sillY - 6), 9, Paint()..color = lc[1]);
+    canvas.drawCircle(Offset(cx - 4, sillY - 19), 8, Paint()..color = lc[0]);
+    canvas.drawCircle(Offset(cx + 4, sillY - 19), 8, Paint()..color = lc[1]);
+    // Accent flower bud
+    canvas.drawCircle(
+      Offset(cx + (index.isEven ? 3 : -3), sillY - 26),
+      3.5,
+      Paint()..color = const Color(0xFFFF8888),
     );
   }
 
@@ -659,6 +796,34 @@ class _Panel7WindowSceneState extends State<Panel7WindowScene>
                 ),
               ),
 
+              // ── Edge vignette
+              IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                      center: Alignment.center,
+                      radius: 1.3,
+                      colors: const [Colors.transparent, Color(0xAA000000)],
+                    ),
+                  ),
+                  child: const SizedBox.expand(),
+                ),
+              ),
+
+              // ── Location badge (top-left)
+              const Positioned(
+                top: 20,
+                left: 20,
+                child: _LocationBadge(label: 'Home  ·  Living Room'),
+              ),
+
+              // ── Panel chip (top-right)
+              const Positioned(
+                top: 20,
+                right: 20,
+                child: _PanelChip(label: 'P7'),
+              ),
+
               // ── VN text box
               if (!_endSceneStarted) _buildTextBox(),
 
@@ -757,6 +922,80 @@ class _Panel7WindowSceneState extends State<Panel7WindowScene>
               fontSize: 10,
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  LOCATION BADGE
+// ════════════════════════════════════════════════════════════════════════════
+
+class _LocationBadge extends StatelessWidget {
+  const _LocationBadge({required this.label});
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+      decoration: BoxDecoration(
+        color: const Color(0xBB060318),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.accent.withAlpha(100), width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.accent.withAlpha(25),
+            blurRadius: 10,
+            spreadRadius: 1,
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.location_on_outlined,
+              color: AppColors.accentLight, size: 12),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: AppTextStyles.labelSmall.copyWith(
+              color: AppColors.textSecondary,
+              fontSize: 11,
+              letterSpacing: 0.8,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  PANEL CHIP
+// ════════════════════════════════════════════════════════════════════════════
+
+class _PanelChip extends StatelessWidget {
+  const _PanelChip({required this.label});
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: AppColors.accent.withAlpha(25),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.accent.withAlpha(70)),
+      ),
+      child: Text(
+        label,
+        style: AppTextStyles.labelSmall.copyWith(
+          color: AppColors.accent,
+          fontSize: 10,
+          letterSpacing: 1.8,
+          fontWeight: FontWeight.w700,
         ),
       ),
     );

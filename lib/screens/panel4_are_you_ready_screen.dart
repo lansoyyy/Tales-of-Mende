@@ -70,11 +70,11 @@ class _Panel4AreYouReadyScreenState extends State<Panel4AreYouReadyScreen>
   }
 
   // ── Palette ───────────────────────────────────────────────────────────────
-  static const Color _boardBg = Color(0xFF1A1040);
+  static const Color _boardBg = Color(0xFF0D0520);
   static const Color _boardBorder = Color(0xFF3A2A70);
-  static const Color _gridLine = Color(0xFF252060);
-  static const Color _neonOrange = Color(0xFFFFAA00);
-  static const Color _neonOrangeGlow = Color(0x66FFAA00);
+  static const Color _gridLine = Color(0xFF1E1050);
+  static const Color _goldAccent = Color(0xFFD4A853);
+  static const Color _goldGlow = Color(0x66D4A853);
   static const Color _heartRed = Color(0xFFFF4466);
 
   @override
@@ -156,7 +156,7 @@ class _Panel4AreYouReadyScreenState extends State<Panel4AreYouReadyScreen>
                         Text(
                           'HI-SCORE',
                           style: AppTextStyles.labelSmall.copyWith(
-                            color: _neonOrange,
+                            color: _goldAccent,
                             letterSpacing: 1.5,
                             fontSize: 9,
                           ),
@@ -164,7 +164,7 @@ class _Panel4AreYouReadyScreenState extends State<Panel4AreYouReadyScreen>
                         Text(
                           '000000',
                           style: AppTextStyles.labelMedium.copyWith(
-                            color: _neonOrange,
+                            color: _goldAccent,
                             letterSpacing: 2,
                             fontSize: 13,
                           ),
@@ -196,13 +196,13 @@ class _Panel4AreYouReadyScreenState extends State<Panel4AreYouReadyScreen>
                   child: Text(
                     'START',
                     style: AppTextStyles.displaySmall.copyWith(
-                      color: _neonOrange,
+                      color: _goldAccent,
                       fontSize: 48,
                       fontWeight: FontWeight.w700,
                       letterSpacing: 6,
                       shadows: [
-                        Shadow(color: _neonOrangeGlow, blurRadius: 20),
-                        const Shadow(color: Color(0x55FFAA00), blurRadius: 40),
+                        Shadow(color: _goldGlow, blurRadius: 20),
+                        const Shadow(color: Color(0x33D4A853), blurRadius: 40),
                       ],
                     ),
                   ),
@@ -254,7 +254,7 @@ class _Panel4AreYouReadyScreenState extends State<Panel4AreYouReadyScreen>
                       isSelected: _selected == true,
                       arrowSide: AxisDirection.right,
                       onTap: _onYes,
-                      color: _neonOrange,
+                      color: _goldAccent,
                     ),
                     const SizedBox(width: 40),
                     _RetroChoiceButton(

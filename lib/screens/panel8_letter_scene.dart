@@ -133,8 +133,6 @@ class _Panel8LetterSceneState extends State<Panel8LetterScene>
   late Animation<double> _fadeIn;
   late AnimationController _endFadeCtrl;
   late Animation<double> _endFade;
-  late AnimationController _endBannerCtrl;
-  late Animation<double> _endBanner;
 
   // Letter image subtle float animation
   late AnimationController _floatCtrl;
@@ -170,12 +168,6 @@ class _Panel8LetterSceneState extends State<Panel8LetterScene>
     );
     _endFade = CurvedAnimation(parent: _endFadeCtrl, curve: Curves.easeIn);
 
-    _endBannerCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 600),
-    );
-    _endBanner = CurvedAnimation(parent: _endBannerCtrl, curve: Curves.easeIn);
-
     // Letter floating animation
     _floatCtrl = AnimationController(
       vsync: this,
@@ -194,7 +186,6 @@ class _Panel8LetterSceneState extends State<Panel8LetterScene>
     _blinkCtrl.dispose();
     _fadeInCtrl.dispose();
     _endFadeCtrl.dispose();
-    _endBannerCtrl.dispose();
     _floatCtrl.dispose();
     super.dispose();
   }
@@ -253,19 +244,14 @@ class _Panel8LetterSceneState extends State<Panel8LetterScene>
     setState(() => _endSceneStarted = true);
     _endFadeCtrl.forward().then((_) {
       if (!mounted) return;
-      _endBannerCtrl.forward().then((_) {
-        Future.delayed(const Duration(milliseconds: 1400), () {
-          if (!mounted) return;
-          Navigator.of(context).pushReplacement(
-            PageRouteBuilder(
-              pageBuilder: (_, __, ___) => const Quest1Panel1Hallway(),
-              transitionsBuilder: (_, anim, __, child) =>
-                  FadeTransition(opacity: anim, child: child),
-              transitionDuration: const Duration(milliseconds: 800),
-            ),
-          );
-        });
-      });
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const Quest1Panel1Hallway(),
+          transitionsBuilder: (_, anim, __, child) =>
+              FadeTransition(opacity: anim, child: child),
+          transitionDuration: const Duration(milliseconds: 800),
+        ),
+      );
     });
   }
 
@@ -340,6 +326,34 @@ class _Panel8LetterSceneState extends State<Panel8LetterScene>
                 ),
               ),
 
+              // ── Edge vignette
+              IgnorePointer(
+                child: DecoratedBox(
+                  decoration: BoxDecoration(
+                    gradient: RadialGradient(
+                      center: Alignment.center,
+                      radius: 1.3,
+                      colors: const [Colors.transparent, Color(0xAA000000)],
+                    ),
+                  ),
+                  child: const SizedBox.expand(),
+                ),
+              ),
+
+              // ── Location badge (top-left)
+              const Positioned(
+                top: 20,
+                left: 20,
+                child: _LocationBadge(label: 'Home  ·  Study'),
+              ),
+
+              // ── Panel chip (top-right)
+              const Positioned(
+                top: 20,
+                right: 20,
+                child: _PanelChip(label: 'P8'),
+              ),
+
               // ── VN text box
               if (!_endSceneStarted) _buildTextBox(),
 
@@ -351,37 +365,6 @@ class _Panel8LetterSceneState extends State<Panel8LetterScene>
                 child: FadeTransition(
                   opacity: _endFade,
                   child: Container(color: Colors.black),
-                ),
-              ),
-
-              // ── End of Scene banner
-              IgnorePointer(
-                child: FadeTransition(
-                  opacity: _endBanner,
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          'End of Scene',
-                          style: AppTextStyles.headlineMedium.copyWith(
-                            color: AppColors.accentLight,
-                            letterSpacing: 3,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          '— Opening Scene —',
-                          style: AppTextStyles.labelMedium.copyWith(
-                            color: AppColors.textSecondary,
-                            letterSpacing: 2,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
                 ),
               ),
             ],
@@ -503,6 +486,80 @@ class _PixelLetterPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  LOCATION BADGE
+// ════════════════════════════════════════════════════════════════════════════
+
+class _LocationBadge extends StatelessWidget {
+  const _LocationBadge({required this.label});
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+      decoration: BoxDecoration(
+        color: const Color(0xBB060318),
+        borderRadius: BorderRadius.circular(20),
+        border: Border.all(color: AppColors.accent.withAlpha(100), width: 1),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.accent.withAlpha(25),
+            blurRadius: 10,
+            spreadRadius: 1,
+          ),
+        ],
+      ),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.location_on_outlined,
+              color: AppColors.accentLight, size: 12),
+          const SizedBox(width: 6),
+          Text(
+            label,
+            style: AppTextStyles.labelSmall.copyWith(
+              color: AppColors.textSecondary,
+              fontSize: 11,
+              letterSpacing: 0.8,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+// ════════════════════════════════════════════════════════════════════════════
+//  PANEL CHIP
+// ════════════════════════════════════════════════════════════════════════════
+
+class _PanelChip extends StatelessWidget {
+  const _PanelChip({required this.label});
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      decoration: BoxDecoration(
+        color: AppColors.accent.withAlpha(25),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: AppColors.accent.withAlpha(70)),
+      ),
+      child: Text(
+        label,
+        style: AppTextStyles.labelSmall.copyWith(
+          color: AppColors.accent,
+          fontSize: 10,
+          letterSpacing: 1.8,
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+    );
+  }
 }
 
 // ════════════════════════════════════════════════════════════════════════════

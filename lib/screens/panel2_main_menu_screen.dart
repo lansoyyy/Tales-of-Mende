@@ -223,7 +223,28 @@ class _Panel2MainMenuScreenState extends State<Panel2MainMenuScreen>
                         ),
                       ),
                     ),
+                    const SizedBox(height: 8),
 
+                    // ── Gold divider + edition label ─────────────────────
+                    Row(
+                      children: [
+                        Container(
+                          width: leftWidth * 0.55,
+                          height: 1,
+                          color: AppColors.accent.withAlpha(80),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'OPENING CHAPTER',
+                      style: AppTextStyles.labelSmall.copyWith(
+                        color: AppColors.accent.withAlpha(160),
+                        fontSize: 9,
+                        letterSpacing: 3.0,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
                     const Spacer(),
 
                     // ── NEW GAME button (featured) ────────────────────────────

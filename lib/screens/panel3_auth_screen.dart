@@ -83,14 +83,14 @@ class _Panel3AuthScreenState extends State<Panel3AuthScreen>
     });
   }
 
-  // ── Wood board palette ────────────────────────────────────────────────────
-  static const Color _woodDark = Color(0xFF5C3A1E);
-  static const Color _woodMid = Color(0xFF7D5230);
-  static const Color _woodLight = Color(0xFF9E6B3E);
-  static const Color _woodBorder = Color(0xFF3D2210);
-  static const Color _fieldText = Color(0xFF3A2010);
-  static const Color _greenBtn = Color(0xFF4CAF50);
-  static const Color _greenBtnDark = Color(0xFF2E7D32);
+  // ── Dark-fantasy palette ───────────────────────────────────────
+  static const Color _woodDark = Color(0xFF0D0520);   // darkest purple
+  static const Color _woodMid = Color(0xFF1A0A2E);    // primary dark purple
+  static const Color _woodLight = Color(0xFF2D1550);  // lighter purple
+  static const Color _woodBorder = Color(0xFFD4A853); // gold accent
+  static const Color _fieldText = Color(0xFFF5EDD8);  // parchment text
+  static const Color _greenBtn = Color(0xFFD4A853);   // gold accent
+  static const Color _greenBtnDark = Color(0xFFA07030); // darker gold
 
   @override
   Widget build(BuildContext context) {
@@ -106,11 +106,20 @@ class _Panel3AuthScreenState extends State<Panel3AuthScreen>
             AppAssets.authBackground,
             fit: BoxFit.cover,
             errorBuilder: (_, __, ___) =>
-                Container(color: const Color(0xFF8BC34A)),
+                Container(color: const Color(0xFF0D0828)),
           ),
 
-          // ── Green tint overlay to give grassy feel ─────────────────────────
-          Container(color: const Color(0x22558B2F)),
+          // ── Deep vignette overlay ──────────────────────────────
+          DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: RadialGradient(
+                center: Alignment.center,
+                radius: 1.1,
+                colors: const [Color(0x55000000), Color(0xBB000000)],
+              ),
+            ),
+            child: const SizedBox.expand(),
+          ),
 
           // ── Animated board ─────────────────────────────────────────────────
           Center(
@@ -164,8 +173,13 @@ class _Panel3AuthScreenState extends State<Panel3AuthScreen>
           colors: [_woodLight, _woodMid, _woodDark],
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: _woodBorder, width: 3),
+        border: Border.all(color: _woodBorder, width: 1.5),
         boxShadow: [
+          BoxShadow(
+            color: const Color(0xFFD4A853).withAlpha(40),
+            blurRadius: 30,
+            spreadRadius: 2,
+          ),
           BoxShadow(
             color: Colors.black.withAlpha(140),
             blurRadius: 20,
@@ -355,20 +369,21 @@ class _Panel3AuthScreenState extends State<Panel3AuthScreen>
     final label = _tabIndex == 0 ? 'CREATE MY ACCOUNT' : 'LOG IN';
     return GestureDetector(
       onTap: _isLoading ? null : _submit,
-      child: Container(
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
         height: 44,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
+          gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            colors: [Color(0xFF66BB6A), _greenBtn, _greenBtnDark],
+            colors: [_greenBtn.withAlpha(220), _greenBtn, _greenBtnDark],
           ),
           borderRadius: BorderRadius.circular(30),
-          border: Border.all(color: const Color(0xFF1B5E20), width: 2),
+          border: Border.all(color: _greenBtn.withAlpha(180), width: 1.5),
           boxShadow: [
             BoxShadow(
-              color: _greenBtn.withAlpha(100),
-              blurRadius: 12,
+              color: _greenBtn.withAlpha(80),
+              blurRadius: 14,
               offset: const Offset(0, 4),
             ),
           ],
@@ -400,12 +415,12 @@ class _Panel3AuthScreenState extends State<Panel3AuthScreen>
                       style: AppTextStyles.buttonText.copyWith(
                         fontSize: 13,
                         letterSpacing: 1.5,
-                        color: Colors.white,
+                        color: const Color(0xFF1A0A2E),
                         shadows: [
-                          const Shadow(
-                            color: Color(0x881B5E20),
+                          Shadow(
+                            color: Colors.black.withAlpha(80),
                             blurRadius: 4,
-                            offset: Offset(0, 2),
+                            offset: const Offset(0, 2),
                           ),
                         ],
                       ),
@@ -433,8 +448,9 @@ class _TabButton extends StatelessWidget {
   final String asset;
   final VoidCallback onTap;
 
-  static const Color _woodDark = Color(0xFF5C3A1E);
-  static const Color _woodBorder = Color(0xFF3D2210);
+  static const Color _activeBg = Color(0xFF3A1A6A);
+  static const Color _inactiveBg = Color(0xFF1A0A2E);
+  static const Color _goldBorder = Color(0xFFD4A853);
 
   @override
   Widget build(BuildContext context) {
@@ -444,12 +460,20 @@ class _TabButton extends StatelessWidget {
         duration: const Duration(milliseconds: 200),
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
         decoration: BoxDecoration(
-          color: isActive ? _woodBorder : _woodDark.withAlpha(120),
+          color: isActive ? _activeBg : _inactiveBg.withAlpha(200),
           borderRadius: BorderRadius.circular(6),
           border: Border.all(
-            color: isActive ? Colors.white.withAlpha(160) : _woodBorder,
+            color: isActive ? _goldBorder : _goldBorder.withAlpha(60),
             width: 1.5,
           ),
+          boxShadow: isActive
+              ? [
+                  BoxShadow(
+                    color: _goldBorder.withAlpha(40),
+                    blurRadius: 8,
+                  ),
+                ]
+              : [],
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
@@ -458,7 +482,7 @@ class _TabButton extends StatelessWidget {
               asset,
               width: 14,
               height: 14,
-              color: isActive ? Colors.white : Colors.white.withAlpha(120),
+              color: isActive ? _goldBorder : _goldBorder.withAlpha(100),
               colorBlendMode: BlendMode.srcIn,
               errorBuilder: (_, __, ___) => const SizedBox(),
             ),
@@ -466,7 +490,7 @@ class _TabButton extends StatelessWidget {
             Text(
               label,
               style: AppTextStyles.labelMedium.copyWith(
-                color: isActive ? Colors.white : Colors.white.withAlpha(140),
+                color: isActive ? _goldBorder : _goldBorder.withAlpha(140),
                 letterSpacing: 1.5,
                 fontSize: 10,
                 fontWeight: isActive ? FontWeight.w700 : FontWeight.w500,
@@ -498,9 +522,9 @@ class _WoodField extends StatelessWidget {
   final String? Function(String?)? validator;
   final Widget? suffix;
 
-  static const Color _fieldBg = Color(0xFFEDE0CB);
-  static const Color _fieldText = Color(0xFF3A2010);
-  static const Color _fieldBorder = Color(0xFF8B6343);
+  static const Color _fieldBg = Color(0xFF14082A);
+  static const Color _fieldText = Color(0xFFF5EDD8);
+  static const Color _fieldBorder = Color(0xFFD4A853);
 
   @override
   Widget build(BuildContext context) {
@@ -534,11 +558,11 @@ class _WoodField extends StatelessWidget {
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(color: _fieldBorder, width: 1.5),
+          borderSide: BorderSide(color: _fieldBorder.withAlpha(80), width: 1.5),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(6),
-          borderSide: const BorderSide(color: Color(0xFF5C3A1E), width: 2),
+          borderSide: const BorderSide(color: _fieldBorder, width: 2),
         ),
         errorStyle: AppTextStyles.labelSmall.copyWith(
           color: Colors.red.shade200,
