@@ -19,8 +19,10 @@ class _ScriptEntry {
 }
 
 const List<_ScriptEntry> _script = [
-  _ScriptEntry(_EntryType.sfxBeat, '[Ambient Hall SFX]'),
+  _ScriptEntry(_EntryType.sfxBeat, '[Footsteps SFX]'),
   _ScriptEntry(_EntryType.innerThought, '"Well, this is it."'),
+  _ScriptEntry(_EntryType.narrative, 'You gripped your bag tighter.'),
+  _ScriptEntry(_EntryType.narrative, '"Ah, you must be the intern," a voice called from behind you.'),
   _ScriptEntry(_EntryType.endScene, ''),
 ];
 

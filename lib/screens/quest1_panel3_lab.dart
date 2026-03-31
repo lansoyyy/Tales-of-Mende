@@ -4,23 +4,112 @@ import 'package:flutter/services.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/utils/app_assets.dart';
+import 'quest1_game_screen.dart';
 
 // ════════════════════════════════════════════════════════════════════════════
 //  SCRIPT — Quest 1 · Panel 3
 // ════════════════════════════════════════════════════════════════════════════
 
-enum _EntryType { narrative, innerThought, sfxBeat, endScene }
+enum _EntryType { narrative, innerThought, dialogue, sfxBeat, popUpFx, endScene }
 
 class _ScriptEntry {
-  const _ScriptEntry(this.type, this.text);
+  const _ScriptEntry(this.type, this.text, {this.speaker});
   final _EntryType type;
   final String text;
+  final String? speaker;
 }
 
 const List<_ScriptEntry> _script = [
+  _ScriptEntry(_EntryType.sfxBeat, '[Door Creak SFX]'),
+  _ScriptEntry(
+    _EntryType.innerThought,
+    '"Wow," you thought to yourself. "It\'s even bigger than I imagined."',
+  ),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"And this is where you will spend the majority of your time."',
+    speaker: 'MR. GRAHAM',
+  ),
   _ScriptEntry(
     _EntryType.narrative,
-    'After your brief tour, Mr. Graham led you to the laboratory.',
+    'You took in the bright lights and gleaming equipment, your eyes wide with awe.',
+  ),
+  _ScriptEntry(_EntryType.popUpFx, ''),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"I\'ll take it from here, Mr. Graham!"',
+    speaker: 'MR. MENDELEEV',
+  ),
+  _ScriptEntry(
+    _EntryType.narrative,
+    'You shifted your attention to the source of the new voice. A tall, bright-eyed man stepped forward with an easy smile. Mr. Graham gave a quiet nod.',
+  ),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"Hi, my name is Dmitri Mendeleev. Welcome to the laboratory."',
+    speaker: 'MR. MENDELEEV',
+  ),
+  _ScriptEntry(
+    _EntryType.narrative,
+    'He extended his hand toward you. You shook it, feeling a surge of excitement.',
+  ),
+  _ScriptEntry(
+    _EntryType.innerThought,
+    'This was it. It was really happening!',
+  ),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"It is a pleasure to work with you, sir!"',
+    speaker: 'PLAYER',
+  ),
+  _ScriptEntry(
+    _EntryType.narrative,
+    'The two of you shared a polite smile.',
+  ),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"See to it our intern settles in well, Mendeleev."',
+    speaker: 'MR. GRAHAM',
+  ),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"Of course, sir."',
+    speaker: 'MR. MENDELEEV',
+  ),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"Very well. I must get going. Carry on."',
+    speaker: 'MR. GRAHAM',
+  ),
+  _ScriptEntry(
+    _EntryType.narrative,
+    'You watched as he turned on his heel and walked out, his footsteps firm and unhurried.',
+  ),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"Don\'t be intimidated by him. Mr. Graham is always like that."',
+    speaker: 'MR. MENDELEEV',
+  ),
+  _ScriptEntry(_EntryType.narrative, 'You turned your attention back to Mr. Mendeleev.'),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"Come, I\'ll show you around."',
+    speaker: 'MR. MENDELEEV',
+  ),
+  _ScriptEntry(
+    _EntryType.narrative,
+    'You settled in fairly quickly, no thanks to Mr. Mendeleev\'s warm hospitality. Before long, he gestured to a neatly arranged stack of cards on the counter.',
+  ),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"What\'s this?"',
+    speaker: 'PLAYER',
+  ),
+  _ScriptEntry(_EntryType.narrative, 'Mr. Mendeleev chuckled softly.'),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"I know you must already be familiar with the elements of the periodic table. But let\'s see just how well you really know them."',
+    speaker: 'MR. MENDELEEV',
   ),
   _ScriptEntry(_EntryType.endScene, ''),
 ];
@@ -46,10 +135,17 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
   late AnimationController _typeCtrl;
   late Animation<int> _typeAnim;
   late AnimationController _blinkCtrl;
+
+  late AnimationController _sfxCtrl;
+  late Animation<double> _sfxAnim;
+  String _sfxLabel = '';
+  bool _sfxVisible = false;
+
+  late AnimationController _flashCtrl;
+  late Animation<double> _flashAnim;
+
   late AnimationController _endFadeCtrl;
   late Animation<double> _endFade;
-  late AnimationController _endBannerCtrl;
-  late Animation<double> _endBanner;
 
   _ScriptEntry get _current => _script[_beatIndex];
 
@@ -75,18 +171,23 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
       duration: const Duration(milliseconds: 550),
     )..repeat(reverse: true);
 
+    _sfxCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 350),
+    );
+    _sfxAnim = CurvedAnimation(parent: _sfxCtrl, curve: Curves.easeIn);
+
+    _flashCtrl = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+    _flashAnim = CurvedAnimation(parent: _flashCtrl, curve: Curves.easeOut);
+
     _endFadeCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
     );
     _endFade = CurvedAnimation(parent: _endFadeCtrl, curve: Curves.easeIn);
-
-    _endBannerCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 700),
-    );
-    _endBanner =
-        CurvedAnimation(parent: _endBannerCtrl, curve: Curves.easeOut);
 
     _processBeat();
   }
@@ -96,27 +197,30 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
     _fadeInCtrl.dispose();
     _typeCtrl.dispose();
     _blinkCtrl.dispose();
+    _sfxCtrl.dispose();
+    _flashCtrl.dispose();
     _endFadeCtrl.dispose();
-    _endBannerCtrl.dispose();
     super.dispose();
   }
-
-  // ── Beat processing ────────────────────────────────────────────────────
 
   void _processBeat() {
     if (_beatIndex >= _script.length) return;
     switch (_current.type) {
+      case _EntryType.sfxBeat:
+        _showSfxChip(_current.text);
+      case _EntryType.popUpFx:
+        _triggerWhiteFlash();
       case _EntryType.endScene:
         _triggerEndScene();
       case _EntryType.narrative:
       case _EntryType.innerThought:
-      case _EntryType.sfxBeat:
+      case _EntryType.dialogue:
         _startTypewriter(_current.text);
     }
   }
 
   void _startTypewriter(String text) {
-    final ms = math.min(text.length * 32, 3200);
+    final ms = math.min(text.length * 28, 3200);
     _typeCtrl.duration = Duration(milliseconds: ms);
     _typeAnim = IntTween(begin: 0, end: text.length)
         .animate(CurvedAnimation(parent: _typeCtrl, curve: Curves.linear));
@@ -127,6 +231,8 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
 
   void _onTap() {
     if (_endSceneStarted) return;
+    final t = _current.type;
+    if (t == _EntryType.sfxBeat || t == _EntryType.popUpFx) return;
     if (_typeCtrl.isAnimating) {
       _typeCtrl.value = 1.0;
       return;
@@ -141,19 +247,44 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
     }
   }
 
+  void _showSfxChip(String label) {
+    setState(() {
+      _sfxLabel = label;
+      _sfxVisible = true;
+    });
+    _sfxCtrl.forward(from: 0).then((_) {
+      Future.delayed(const Duration(milliseconds: 700), () {
+        if (!mounted) return;
+        _sfxCtrl.reverse().then((_) {
+          if (!mounted) return;
+          setState(() => _sfxVisible = false);
+          _advanceBeat();
+        });
+      });
+    });
+  }
+
+  void _triggerWhiteFlash() {
+    _flashCtrl.forward(from: 0).then((_) {
+      _flashCtrl.reverse().then((_) {
+        if (!mounted) return;
+        _advanceBeat();
+      });
+    });
+  }
+
   void _triggerEndScene() {
     setState(() => _endSceneStarted = true);
     _endFadeCtrl.forward().then((_) {
       if (!mounted) return;
-      _endBannerCtrl.forward().then((_) {
-        // Quest 1 intro complete — navigate to the quest gameplay.
-        // TODO: replace Navigator.pop() with the Quest 1 gameplay screen
-        // once it is implemented.
-        Future.delayed(const Duration(milliseconds: 2000), () {
-          if (!mounted) return;
-          Navigator.of(context).popUntil((route) => route.isFirst);
-        });
-      });
+      Navigator.of(context).pushReplacement(
+        PageRouteBuilder(
+          pageBuilder: (_, __, ___) => const Quest1GameScreen(),
+          transitionsBuilder: (_, anim, __, child) =>
+              FadeTransition(opacity: anim, child: child),
+          transitionDuration: const Duration(milliseconds: 800),
+        ),
+      );
     });
   }
 
@@ -243,40 +374,54 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
                 child: _PanelChip(label: 'Q1 · P3'),
               ),
 
+              // ── SFX chip
+              if (_sfxVisible)
+                Positioned(
+                  top: 56,
+                  left: 0,
+                  right: 0,
+                  child: Center(
+                    child: FadeTransition(
+                      opacity: _sfxAnim,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 14, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: const Color(0xCC0A0718),
+                          borderRadius: BorderRadius.circular(20),
+                          border: Border.all(
+                              color: AppColors.accent.withAlpha(100)),
+                        ),
+                        child: Text(
+                          _sfxLabel,
+                          style: AppTextStyles.labelSmall.copyWith(
+                            color: AppColors.accentLight,
+                            fontSize: 11,
+                            letterSpacing: 1.2,
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+
               // ── VN text box
               if (!_endSceneStarted) _buildTextBox(),
+
+              // ── White flash (popUpFx)
+              IgnorePointer(
+                child: FadeTransition(
+                  opacity: _flashAnim,
+                  child: Container(color: Colors.white),
+                ),
+              ),
 
               // ── End fade-to-black
               IgnorePointer(
                 child: FadeTransition(
                   opacity: _endFade,
                   child: Container(color: Colors.black),
-                ),
-              ),
-
-              // ── End-of-scene banner
-              IgnorePointer(
-                child: FadeTransition(
-                  opacity: _endBanner,
-                  child: Center(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        _GoldDivider(),
-                        const SizedBox(height: 14),
-                        Text(
-                          'Quest 1  ·  Chapter Begin',
-                          style: AppTextStyles.headlineSmall.copyWith(
-                            color: AppColors.accentLight,
-                            letterSpacing: 3,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                        const SizedBox(height: 14),
-                        _GoldDivider(),
-                      ],
-                    ),
-                  ),
                 ),
               ),
             ],
@@ -289,6 +434,8 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
   Widget _buildTextBox() {
     final entry = _current;
     if (entry.type == _EntryType.endScene) return const SizedBox.shrink();
+    if (entry.type == _EntryType.popUpFx) return const SizedBox.shrink();
+    if (entry.type == _EntryType.sfxBeat && _sfxVisible) return const SizedBox.shrink();
     return Positioned(
       left: 0,
       right: 0,
@@ -302,6 +449,7 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
           final isDone = !_typeCtrl.isAnimating && _typeCtrl.value >= 1.0;
           return _VnTextBox(
             entryType: entry.type,
+            speaker: entry.speaker,
             displayText: display,
             showBlink: isDone,
             blinkOpacity: _blinkCtrl.value,
@@ -310,47 +458,6 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
       ),
     );
   }
-}
-
-// ════════════════════════════════════════════════════════════════════════════
-//  GOLD DIVIDER
-// ════════════════════════════════════════════════════════════════════════════
-
-class _GoldDivider extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        _thin(70),
-        const SizedBox(width: 10),
-        Transform.rotate(
-          angle: math.pi / 4,
-          child: Container(
-            width: 7,
-            height: 7,
-            decoration: BoxDecoration(
-              color: AppColors.accent,
-              boxShadow: [
-                BoxShadow(
-                  color: AppColors.accent.withAlpha(120),
-                  blurRadius: 6,
-                ),
-              ],
-            ),
-          ),
-        ),
-        const SizedBox(width: 10),
-        _thin(70),
-      ],
-    );
-  }
-
-  Widget _thin(double w) => Container(
-        width: w,
-        height: 1,
-        color: AppColors.accentDark,
-      );
 }
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -437,15 +544,18 @@ class _VnTextBox extends StatelessWidget {
     required this.displayText,
     required this.showBlink,
     required this.blinkOpacity,
+    this.speaker,
   });
 
   final _EntryType entryType;
   final String displayText;
   final bool showBlink;
   final double blinkOpacity;
+  final String? speaker;
 
   @override
   Widget build(BuildContext context) {
+    final isDialogue = entryType == _EntryType.dialogue;
     final textStyle = entryType == _EntryType.innerThought
         ? AppTextStyles.narrative.copyWith(color: AppColors.accentLight)
         : AppTextStyles.narrative;
@@ -455,25 +565,42 @@ class _VnTextBox extends StatelessWidget {
         color: Color(0xD40A0718),
         border: Border(top: BorderSide(color: AppColors.accent, width: 1.5)),
       ),
-      padding: const EdgeInsets.fromLTRB(20, 14, 20, 20),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.end,
+      padding: EdgeInsets.fromLTRB(20, isDialogue && speaker != null ? 10 : 14, 20, 20),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(child: Text(displayText, style: textStyle)),
-          if (showBlink)
-            Padding(
-              padding: const EdgeInsets.only(left: 4, bottom: 2),
-              child: Opacity(
-                opacity: blinkOpacity,
-                child: Text(
-                  '▼',
-                  style: AppTextStyles.labelSmall.copyWith(
-                    color: AppColors.accentLight,
-                    fontSize: 12,
-                  ),
-                ),
+          if (isDialogue && speaker != null) ...[            Text(
+              speaker!,
+              style: AppTextStyles.labelSmall.copyWith(
+                color: AppColors.accent,
+                fontSize: 10,
+                letterSpacing: 2.0,
+                fontWeight: FontWeight.w700,
               ),
             ),
+            const SizedBox(height: 6),
+          ],
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              Expanded(child: Text(displayText, style: textStyle)),
+              if (showBlink)
+                Padding(
+                  padding: const EdgeInsets.only(left: 4, bottom: 2),
+                  child: Opacity(
+                    opacity: blinkOpacity,
+                    child: Text(
+                      '▼',
+                      style: AppTextStyles.labelSmall.copyWith(
+                        color: AppColors.accentLight,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         ],
       ),
     );

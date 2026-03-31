@@ -4,13 +4,12 @@ import 'package:flutter/services.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/utils/app_assets.dart';
-import 'quest1_panel3_lab.dart';
 
 // ════════════════════════════════════════════════════════════════════════════
-//  SCRIPT — Quest 1 · Panel 2
+//  SCRIPT — Quest 1 · Outro
 // ════════════════════════════════════════════════════════════════════════════
 
-enum _EntryType { narrative, innerThought, dialogue, sfxBeat, popUpFx, endScene }
+enum _EntryType { narrative, innerThought, dialogue, endScene }
 
 class _ScriptEntry {
   const _ScriptEntry(this.type, this.text, {this.speaker});
@@ -20,225 +19,51 @@ class _ScriptEntry {
 }
 
 const List<_ScriptEntry> _script = [
-  _ScriptEntry(_EntryType.popUpFx, ''),
-  _ScriptEntry(_EntryType.dialogue, '"Greetings. I am Marshal Graham. Head of Genius Society."',
-      speaker: 'MR. GRAHAM'),
-  _ScriptEntry(_EntryType.narrative, 'You grinned and eagerly shook his hand.'),
-  _ScriptEntry(_EntryType.dialogue, '"It is an honor to meet you, sir."', speaker: 'PLAYER'),
-  _ScriptEntry(_EntryType.dialogue, '"The pleasure is mine."', speaker: 'MR. GRAHAM'),
-  _ScriptEntry(_EntryType.narrative, 'You look around the hall.'),
-  _ScriptEntry(_EntryType.narrative, 'Mr. Graham raised a brow.'),
-  _ScriptEntry(_EntryType.dialogue, '"Are you looking for someone?"', speaker: 'MR. GRAHAM'),
-  _ScriptEntry(_EntryType.narrative, 'You shook your head furiously.'),
   _ScriptEntry(
     _EntryType.dialogue,
-    '"Ah! No, I was just wondering if there will be others joining me today."',
+    '"Well done! You\'re quite an expert at this already."',
+    speaker: 'MR. MENDELEEV',
+  ),
+  _ScriptEntry(_EntryType.narrative, 'You shrugged.'),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"It was still quite a lot to learn."',
     speaker: 'PLAYER',
   ),
-  _ScriptEntry(_EntryType.narrative, 'Mr. Graham nodded in understanding.'),
-  _ScriptEntry(_EntryType.dialogue, '"I see."', speaker: 'MR. GRAHAM'),
-  _ScriptEntry(_EntryType.sfxBeat, '[…]'),
   _ScriptEntry(
     _EntryType.dialogue,
-    '"It appears that you were the only candidate chosen for this internship."',
-    speaker: 'MR. GRAHAM',
+    '"Still, you handled yourself well."',
+    speaker: 'MR. MENDELEEV',
   ),
-  _ScriptEntry(_EntryType.narrative, 'Your eyes widened slightly.'),
-  _ScriptEntry(_EntryType.dialogue, '"Is that so?"', speaker: 'PLAYER'),
-  _ScriptEntry(_EntryType.narrative, 'Mr. Graham nodded again.'),
-  _ScriptEntry(_EntryType.dialogue, '"I—I see…"', speaker: 'PLAYER'),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"Thank you."',
+    speaker: 'PLAYER',
+  ),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"Well, that will be all for now. It is still your first day, after all. Go ahead and take a rest."',
+    speaker: 'MR. MENDELEEV',
+  ),
   _ScriptEntry(
     _EntryType.narrative,
-    'A moment of silence fell between the two of you. You fidget with the '
-    'strap of your bag until you hear him clear his throat.',
+    'You nodded, muttering another thank you, and grabbed your bag. You gave Mr. Mendeleev a small wave before stepping out of the room with a quiet sigh of relief.',
   ),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"I see you\'re ready, shall we begin?"',
-    speaker: 'MR. GRAHAM',
-  ),
-  _ScriptEntry(_EntryType.narrative, 'You nodded. "We shall."'),
-  _ScriptEntry(_EntryType.sfxBeat, '[Footsteps SFX]'),
   _ScriptEntry(_EntryType.endScene, ''),
 ];
 
 // ════════════════════════════════════════════════════════════════════════════
-//  GRAND HALL BACKGROUND PAINTER  (fallback if image missing)
+//  QUEST 1 · OUTRO
 // ════════════════════════════════════════════════════════════════════════════
 
-class _GrandHallPainter extends CustomPainter {
-  const _GrandHallPainter();
+class Quest1Panel4Outro extends StatefulWidget {
+  const Quest1Panel4Outro({super.key});
 
   @override
-  void paint(Canvas canvas, Size size) {
-    final w = size.width;
-    final h = size.height;
-
-    // Dark base
-    canvas.drawRect(
-      Rect.fromLTWH(0, 0, w, h),
-      Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: const [Color(0xFF0E0328), Color(0xFF050110)],
-        ).createShader(Rect.fromLTWH(0, 0, w, h)),
-    );
-
-    // Warm chandelier glow from top-center
-    canvas.drawCircle(
-      Offset(w * 0.5, h * 0.12),
-      h * 0.45,
-      Paint()
-        ..shader = RadialGradient(
-          colors: const [Color(0x50D4A853), Color(0x00000000)],
-        ).createShader(
-          Rect.fromCircle(center: Offset(w * 0.5, h * 0.12), radius: h * 0.45),
-        ),
-    );
-
-    // Checkered floor (bottom 30%)
-    final floorY = h * 0.70;
-    final tileSize = w * 0.06;
-    final cols = (w / tileSize).ceil() + 1;
-    final rows = ((h - floorY) / tileSize).ceil() + 1;
-    for (int r = 0; r < rows; r++) {
-      for (int c = 0; c < cols; c++) {
-        final isLight = (r + c) % 2 == 0;
-        canvas.drawRect(
-          Rect.fromLTWH(c * tileSize - (tileSize / 2), floorY + r * tileSize,
-              tileSize, tileSize),
-          Paint()
-            ..color = isLight
-                ? const Color(0xFF1A1030)
-                : const Color(0xFF120825),
-        );
-      }
-    }
-
-    // Floor reflective sheen
-    canvas.drawRect(
-      Rect.fromLTWH(0, floorY, w, h - floorY),
-      Paint()
-        ..shader = LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: const [Color(0x22D4A853), Color(0x00000000)],
-        ).createShader(Rect.fromLTWH(0, floorY, w, h - floorY)),
-    );
-
-    // Side pillars
-    final pillarPaint = Paint()..color = const Color(0xFF1C0C40);
-    const pillars = [0.08, 0.22, 0.78, 0.92];
-    for (final f in pillars) {
-      final px = w * f;
-      canvas.drawRect(
-        Rect.fromLTWH(px - w * 0.018, 0, w * 0.036, h * 0.72),
-        pillarPaint,
-      );
-      // Pillar highlight
-      canvas.drawRect(
-        Rect.fromLTWH(px - w * 0.018, 0, w * 0.005, h * 0.72),
-        Paint()..color = const Color(0x33D4A853),
-      );
-      // Gold base cap
-      canvas.drawRect(
-        Rect.fromLTWH(
-            px - w * 0.022, h * 0.68, w * 0.044, h * 0.038),
-        Paint()..color = const Color(0xFF6A4818),
-      );
-    }
-
-    // Windows between pillars (tall arched glow)
-    const windowXFracs = [0.35, 0.65];
-    for (final f in windowXFracs) {
-      final wx = w * f;
-      final winW = w * 0.15;
-      final winH = h * 0.55;
-      // Arch path
-      final archPath = Path()
-        ..moveTo(wx - winW / 2, h * 0.05 + winH)
-        ..lineTo(wx - winW / 2, h * 0.05 + winH * 0.28)
-        ..quadraticBezierTo(
-            wx, h * 0.03, wx + winW / 2, h * 0.05 + winH * 0.28)
-        ..lineTo(wx + winW / 2, h * 0.05 + winH)
-        ..close();
-      canvas.drawPath(
-        archPath,
-        Paint()
-          ..shader = LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: const [Color(0x60C8E8FF), Color(0x10C8E8FF)],
-          ).createShader(
-            Rect.fromLTWH(wx - winW / 2, h * 0.03, winW, winH),
-          ),
-      );
-      // Window frame
-      canvas.drawPath(
-          archPath,
-          Paint()
-            ..color = const Color(0x66D4A853)
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 2);
-    }
-
-    // Hanging chandelier (centre)
-    final cX = w * 0.50;
-    canvas.drawLine(
-      Offset(cX, 0),
-      Offset(cX, h * 0.10),
-      Paint()
-        ..color = const Color(0xFF7A5828)
-        ..strokeWidth = 3,
-    );
-    canvas.drawOval(
-      Rect.fromCenter(
-          center: Offset(cX, h * 0.14), width: w * 0.06, height: h * 0.06),
-      Paint()..color = const Color(0xFFD4A853),
-    );
-    // Chandelier glow
-    canvas.drawCircle(
-      Offset(cX, h * 0.14),
-      h * 0.08,
-      Paint()
-        ..shader = RadialGradient(
-          colors: const [Color(0x80FFD880), Color(0x00000000)],
-        ).createShader(
-          Rect.fromCircle(
-              center: Offset(cX, h * 0.14), radius: h * 0.08),
-        ),
-    );
-
-    // Vignette
-    canvas.drawRect(
-      Rect.fromLTWH(0, 0, w, h),
-      Paint()
-        ..shader = RadialGradient(
-          center: Alignment.center,
-          radius: 1.1,
-          colors: const [Color(0x00000000), Color(0xCC000000)],
-          stops: const [0.5, 1.0],
-        ).createShader(Rect.fromLTWH(0, 0, w, h)),
-    );
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter _) => false;
+  State<Quest1Panel4Outro> createState() => _Quest1Panel4OutroState();
 }
 
-// ════════════════════════════════════════════════════════════════════════════
-//  QUEST 1 · PANEL 2 — GRAND HALL / RECEPTION
-// ════════════════════════════════════════════════════════════════════════════
-
-class Quest1Panel2Reception extends StatefulWidget {
-  const Quest1Panel2Reception({super.key});
-
-  @override
-  State<Quest1Panel2Reception> createState() => _Quest1Panel2ReceptionState();
-}
-
-class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
+class _Quest1Panel4OutroState extends State<Quest1Panel4Outro>
     with TickerProviderStateMixin {
   int _beatIndex = 0;
   bool _endSceneStarted = false;
@@ -248,15 +73,6 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
   late AnimationController _typeCtrl;
   late Animation<int> _typeAnim;
   late AnimationController _blinkCtrl;
-
-  late AnimationController _sfxCtrl;
-  late Animation<double> _sfxAnim;
-  String _sfxLabel = '';
-  bool _sfxVisible = false;
-
-  late AnimationController _flashCtrl;
-  late Animation<double> _flashAnim;
-
   late AnimationController _endFadeCtrl;
   late Animation<double> _endFade;
 
@@ -284,18 +100,6 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
       duration: const Duration(milliseconds: 550),
     )..repeat(reverse: true);
 
-    _sfxCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 350),
-    );
-    _sfxAnim = CurvedAnimation(parent: _sfxCtrl, curve: Curves.easeIn);
-
-    _flashCtrl = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 300),
-    );
-    _flashAnim = CurvedAnimation(parent: _flashCtrl, curve: Curves.easeOut);
-
     _endFadeCtrl = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 1200),
@@ -310,8 +114,6 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
     _fadeInCtrl.dispose();
     _typeCtrl.dispose();
     _blinkCtrl.dispose();
-    _sfxCtrl.dispose();
-    _flashCtrl.dispose();
     _endFadeCtrl.dispose();
     super.dispose();
   }
@@ -319,10 +121,6 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
   void _processBeat() {
     if (_beatIndex >= _script.length) return;
     switch (_current.type) {
-      case _EntryType.sfxBeat:
-        _showSfxChip(_current.text);
-      case _EntryType.popUpFx:
-        _triggerWhiteFlash();
       case _EntryType.endScene:
         _triggerEndScene();
       case _EntryType.narrative:
@@ -344,8 +142,6 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
 
   void _onTap() {
     if (_endSceneStarted) return;
-    final t = _current.type;
-    if (t == _EntryType.sfxBeat || t == _EntryType.popUpFx) return;
     if (_typeCtrl.isAnimating) {
       _typeCtrl.value = 1.0;
       return;
@@ -360,44 +156,11 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
     }
   }
 
-  void _showSfxChip(String label) {
-    setState(() {
-      _sfxLabel = label;
-      _sfxVisible = true;
-    });
-    _sfxCtrl.forward(from: 0).then((_) {
-      Future.delayed(const Duration(milliseconds: 700), () {
-        if (!mounted) return;
-        _sfxCtrl.reverse().then((_) {
-          if (!mounted) return;
-          setState(() => _sfxVisible = false);
-          _advanceBeat();
-        });
-      });
-    });
-  }
-
-  void _triggerWhiteFlash() {
-    _flashCtrl.forward(from: 0).then((_) {
-      _flashCtrl.reverse().then((_) {
-        if (!mounted) return;
-        _advanceBeat();
-      });
-    });
-  }
-
   void _triggerEndScene() {
     setState(() => _endSceneStarted = true);
     _endFadeCtrl.forward().then((_) {
       if (!mounted) return;
-      Navigator.of(context).pushReplacement(
-        PageRouteBuilder(
-          pageBuilder: (_, __, ___) => const Quest1Panel3Lab(),
-          transitionsBuilder: (_, anim, __, child) =>
-              FadeTransition(opacity: anim, child: child),
-          transitionDuration: const Duration(milliseconds: 800),
-        ),
-      );
+      Navigator.of(context).popUntil((route) => route.isFirst);
     });
   }
 
@@ -416,20 +179,25 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
           child: Stack(
             fit: StackFit.expand,
             children: [
-              // ── Background: try JPEG assets, fall back to painter
+              // ── Lab background (same location as game)
               Image.asset(
-                AppAssets.quest1ReceptionHall,
+                AppAssets.quest1ChemLab,
                 fit: BoxFit.cover,
                 alignment: Alignment.topCenter,
-                errorBuilder: (_, __, ___) => Image.asset(
-                  AppAssets.quest1ReceptionHall2,
-                  fit: BoxFit.cover,
-                  alignment: Alignment.topCenter,
-                  errorBuilder: (__, ___, ____) => const CustomPaint(
-                    painter: _GrandHallPainter(),
-                    child: SizedBox.expand(),
+                errorBuilder: (_, __, ___) => Container(
+                  decoration: const BoxDecoration(
+                    gradient: LinearGradient(
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                      colors: [Color(0xFFD8D8D4), Color(0xFFB0B0AC)],
+                    ),
                   ),
                 ),
+              ),
+
+              // ── Dark overlay
+              IgnorePointer(
+                child: Container(color: const Color(0x22000820)),
               ),
 
               // ── Edge vignette
@@ -451,14 +219,14 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
                 left: 0,
                 right: 0,
                 bottom: 0,
-                height: h * 0.55,
+                height: h * 0.52,
                 child: IgnorePointer(
                   child: Container(
                     decoration: const BoxDecoration(
                       gradient: LinearGradient(
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
-                        colors: [Color(0x00000000), Color(0xF0050214)],
+                        colors: [Color(0x00000000), Color(0xF2050214)],
                       ),
                     ),
                   ),
@@ -470,58 +238,18 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
                 top: 20,
                 left: 20,
                 child: _LocationBadge(
-                    label: 'Elixir Enterprises  ·  Grand Hall'),
+                    label: 'Elixir Enterprises  ·  Laboratory'),
               ),
 
               // ── Panel chip
               const Positioned(
                 top: 20,
                 right: 20,
-                child: _PanelChip(label: 'Q1 · P2'),
+                child: _PanelChip(label: 'Q1  ·  Outro'),
               ),
-
-              // ── SFX chip
-              if (_sfxVisible)
-                Positioned(
-                  top: 56,
-                  left: 0,
-                  right: 0,
-                  child: Center(
-                    child: FadeTransition(
-                      opacity: _sfxAnim,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 6),
-                        decoration: BoxDecoration(
-                          color: const Color(0xCC0A0718),
-                          borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                              color: AppColors.accent.withAlpha(100)),
-                        ),
-                        child: Text(
-                          _sfxLabel,
-                          style: AppTextStyles.labelSmall.copyWith(
-                            color: AppColors.accentLight,
-                            fontSize: 11,
-                            letterSpacing: 1.2,
-                            fontStyle: FontStyle.italic,
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
 
               // ── VN text box
               if (!_endSceneStarted) _buildTextBox(),
-
-              // ── White flash (popUpFx)
-              IgnorePointer(
-                child: FadeTransition(
-                  opacity: _flashAnim,
-                  child: Container(color: Colors.white),
-                ),
-              ),
 
               // ── End fade-to-black
               IgnorePointer(
@@ -540,8 +268,6 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
   Widget _buildTextBox() {
     final entry = _current;
     if (entry.type == _EntryType.endScene) return const SizedBox.shrink();
-    if (entry.type == _EntryType.popUpFx) return const SizedBox.shrink();
-    if (entry.type == _EntryType.sfxBeat && _sfxVisible) return const SizedBox.shrink();
     return Positioned(
       left: 0,
       right: 0,
@@ -671,12 +397,14 @@ class _VnTextBox extends StatelessWidget {
         color: Color(0xD40A0718),
         border: Border(top: BorderSide(color: AppColors.accent, width: 1.5)),
       ),
-      padding: EdgeInsets.fromLTRB(20, isDialogue && speaker != null ? 10 : 14, 20, 20),
+      padding: EdgeInsets.fromLTRB(
+          20, isDialogue && speaker != null ? 10 : 14, 20, 20),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (isDialogue && speaker != null) ...[            Text(
+          if (isDialogue && speaker != null) ...[
+            Text(
               speaker!,
               style: AppTextStyles.labelSmall.copyWith(
                 color: AppColors.accent,
