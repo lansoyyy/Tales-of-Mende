@@ -4,13 +4,21 @@ import 'package:flutter/services.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/utils/app_assets.dart';
+import '../widgets/story_dialogue_box.dart';
 import 'quest1_panel3_lab.dart';
 
 // ════════════════════════════════════════════════════════════════════════════
 //  SCRIPT — Quest 1 · Panel 2
 // ════════════════════════════════════════════════════════════════════════════
 
-enum _EntryType { narrative, innerThought, dialogue, sfxBeat, popUpFx, endScene }
+enum _EntryType {
+  narrative,
+  innerThought,
+  dialogue,
+  sfxBeat,
+  popUpFx,
+  endScene,
+}
 
 class _ScriptEntry {
   const _ScriptEntry(this.type, this.text, {this.speaker});
@@ -21,14 +29,29 @@ class _ScriptEntry {
 
 const List<_ScriptEntry> _script = [
   _ScriptEntry(_EntryType.popUpFx, ''),
-  _ScriptEntry(_EntryType.dialogue, '"Greetings. I am Marshal Graham. Head of Genius Society."',
-      speaker: 'MR. GRAHAM'),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"Greetings. I am Marshal Graham. Head of Genius Society."',
+    speaker: 'MR. GRAHAM',
+  ),
   _ScriptEntry(_EntryType.narrative, 'You grinned and eagerly shook his hand.'),
-  _ScriptEntry(_EntryType.dialogue, '"It is an honor to meet you, sir."', speaker: 'PLAYER'),
-  _ScriptEntry(_EntryType.dialogue, '"The pleasure is mine."', speaker: 'MR. GRAHAM'),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"It is an honor to meet you, sir."',
+    speaker: 'PLAYER',
+  ),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"The pleasure is mine."',
+    speaker: 'MR. GRAHAM',
+  ),
   _ScriptEntry(_EntryType.narrative, 'You look around the hall.'),
   _ScriptEntry(_EntryType.narrative, 'Mr. Graham raised a brow.'),
-  _ScriptEntry(_EntryType.dialogue, '"Are you looking for someone?"', speaker: 'MR. GRAHAM'),
+  _ScriptEntry(
+    _EntryType.dialogue,
+    '"Are you looking for someone?"',
+    speaker: 'MR. GRAHAM',
+  ),
   _ScriptEntry(_EntryType.narrative, 'You shook your head furiously.'),
   _ScriptEntry(
     _EntryType.dialogue,
@@ -90,11 +113,15 @@ class _GrandHallPainter extends CustomPainter {
       Offset(w * 0.5, h * 0.12),
       h * 0.45,
       Paint()
-        ..shader = RadialGradient(
-          colors: const [Color(0x50D4A853), Color(0x00000000)],
-        ).createShader(
-          Rect.fromCircle(center: Offset(w * 0.5, h * 0.12), radius: h * 0.45),
-        ),
+        ..shader =
+            RadialGradient(
+              colors: const [Color(0x50D4A853), Color(0x00000000)],
+            ).createShader(
+              Rect.fromCircle(
+                center: Offset(w * 0.5, h * 0.12),
+                radius: h * 0.45,
+              ),
+            ),
     );
 
     // Checkered floor (bottom 30%)
@@ -106,8 +133,12 @@ class _GrandHallPainter extends CustomPainter {
       for (int c = 0; c < cols; c++) {
         final isLight = (r + c) % 2 == 0;
         canvas.drawRect(
-          Rect.fromLTWH(c * tileSize - (tileSize / 2), floorY + r * tileSize,
-              tileSize, tileSize),
+          Rect.fromLTWH(
+            c * tileSize - (tileSize / 2),
+            floorY + r * tileSize,
+            tileSize,
+            tileSize,
+          ),
           Paint()
             ..color = isLight
                 ? const Color(0xFF1A1030)
@@ -143,8 +174,7 @@ class _GrandHallPainter extends CustomPainter {
       );
       // Gold base cap
       canvas.drawRect(
-        Rect.fromLTWH(
-            px - w * 0.022, h * 0.68, w * 0.044, h * 0.038),
+        Rect.fromLTWH(px - w * 0.022, h * 0.68, w * 0.044, h * 0.038),
         Paint()..color = const Color(0xFF6A4818),
       );
     }
@@ -159,8 +189,7 @@ class _GrandHallPainter extends CustomPainter {
       final archPath = Path()
         ..moveTo(wx - winW / 2, h * 0.05 + winH)
         ..lineTo(wx - winW / 2, h * 0.05 + winH * 0.28)
-        ..quadraticBezierTo(
-            wx, h * 0.03, wx + winW / 2, h * 0.05 + winH * 0.28)
+        ..quadraticBezierTo(wx, h * 0.03, wx + winW / 2, h * 0.05 + winH * 0.28)
         ..lineTo(wx + winW / 2, h * 0.05 + winH)
         ..close();
       canvas.drawPath(
@@ -170,17 +199,16 @@ class _GrandHallPainter extends CustomPainter {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: const [Color(0x60C8E8FF), Color(0x10C8E8FF)],
-          ).createShader(
-            Rect.fromLTWH(wx - winW / 2, h * 0.03, winW, winH),
-          ),
+          ).createShader(Rect.fromLTWH(wx - winW / 2, h * 0.03, winW, winH)),
       );
       // Window frame
       canvas.drawPath(
-          archPath,
-          Paint()
-            ..color = const Color(0x66D4A853)
-            ..style = PaintingStyle.stroke
-            ..strokeWidth = 2);
+        archPath,
+        Paint()
+          ..color = const Color(0x66D4A853)
+          ..style = PaintingStyle.stroke
+          ..strokeWidth = 2,
+      );
     }
 
     // Hanging chandelier (centre)
@@ -194,7 +222,10 @@ class _GrandHallPainter extends CustomPainter {
     );
     canvas.drawOval(
       Rect.fromCenter(
-          center: Offset(cX, h * 0.14), width: w * 0.06, height: h * 0.06),
+        center: Offset(cX, h * 0.14),
+        width: w * 0.06,
+        height: h * 0.06,
+      ),
       Paint()..color = const Color(0xFFD4A853),
     );
     // Chandelier glow
@@ -202,12 +233,12 @@ class _GrandHallPainter extends CustomPainter {
       Offset(cX, h * 0.14),
       h * 0.08,
       Paint()
-        ..shader = RadialGradient(
-          colors: const [Color(0x80FFD880), Color(0x00000000)],
-        ).createShader(
-          Rect.fromCircle(
-              center: Offset(cX, h * 0.14), radius: h * 0.08),
-        ),
+        ..shader =
+            RadialGradient(
+              colors: const [Color(0x80FFD880), Color(0x00000000)],
+            ).createShader(
+              Rect.fromCircle(center: Offset(cX, h * 0.14), radius: h * 0.08),
+            ),
     );
 
     // Vignette
@@ -335,8 +366,10 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
   void _startTypewriter(String text) {
     final ms = math.min(text.length * 28, 3200);
     _typeCtrl.duration = Duration(milliseconds: ms);
-    _typeAnim = IntTween(begin: 0, end: text.length)
-        .animate(CurvedAnimation(parent: _typeCtrl, curve: Curves.linear));
+    _typeAnim = IntTween(
+      begin: 0,
+      end: text.length,
+    ).animate(CurvedAnimation(parent: _typeCtrl, curve: Curves.linear));
     _typeCtrl
       ..reset()
       ..forward();
@@ -470,7 +503,8 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
                 top: 20,
                 left: 20,
                 child: _LocationBadge(
-                    label: 'Elixir Enterprises  ·  Grand Hall'),
+                  label: 'Elixir Enterprises  ·  Grand Hall',
+                ),
               ),
 
               // ── Panel chip
@@ -491,12 +525,15 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
                       opacity: _sfxAnim,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 6),
+                          horizontal: 14,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xCC0A0718),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                              color: AppColors.accent.withAlpha(100)),
+                            color: AppColors.accent.withAlpha(100),
+                          ),
                         ),
                         child: Text(
                           _sfxLabel,
@@ -541,7 +578,8 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
     final entry = _current;
     if (entry.type == _EntryType.endScene) return const SizedBox.shrink();
     if (entry.type == _EntryType.popUpFx) return const SizedBox.shrink();
-    if (entry.type == _EntryType.sfxBeat && _sfxVisible) return const SizedBox.shrink();
+    if (entry.type == _EntryType.sfxBeat && _sfxVisible)
+      return const SizedBox.shrink();
     return Positioned(
       left: 0,
       right: 0,
@@ -553,12 +591,16 @@ class _Quest1Panel2ReceptionState extends State<Quest1Panel2Reception>
           final full = entry.text;
           final display = full.substring(0, chars.clamp(0, full.length));
           final isDone = !_typeCtrl.isAnimating && _typeCtrl.value >= 1.0;
-          return _VnTextBox(
-            entryType: entry.type,
+          final textStyle = entry.type == _EntryType.innerThought
+              ? AppTextStyles.narrative.copyWith(color: AppColors.accentLight)
+              : AppTextStyles.narrative;
+          return StoryDialogueBox(
             speaker: entry.speaker,
             displayText: display,
+            textStyle: textStyle,
             showBlink: isDone,
             blinkOpacity: _blinkCtrl.value,
+            portraitMotionValue: _typeCtrl.value,
           );
         },
       ),
@@ -593,8 +635,11 @@ class _LocationBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.location_on_outlined,
-              color: AppColors.accentLight, size: 12),
+          const Icon(
+            Icons.location_on_outlined,
+            color: AppColors.accentLight,
+            size: 12,
+          ),
           const SizedBox(width: 6),
           Text(
             label,
@@ -643,72 +688,3 @@ class _PanelChip extends StatelessWidget {
 // ════════════════════════════════════════════════════════════════════════════
 //  VN TEXT BOX
 // ════════════════════════════════════════════════════════════════════════════
-
-class _VnTextBox extends StatelessWidget {
-  const _VnTextBox({
-    required this.entryType,
-    required this.displayText,
-    required this.showBlink,
-    required this.blinkOpacity,
-    this.speaker,
-  });
-
-  final _EntryType entryType;
-  final String displayText;
-  final bool showBlink;
-  final double blinkOpacity;
-  final String? speaker;
-
-  @override
-  Widget build(BuildContext context) {
-    final isDialogue = entryType == _EntryType.dialogue;
-    final textStyle = entryType == _EntryType.innerThought
-        ? AppTextStyles.narrative.copyWith(color: AppColors.accentLight)
-        : AppTextStyles.narrative;
-
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xD40A0718),
-        border: Border(top: BorderSide(color: AppColors.accent, width: 1.5)),
-      ),
-      padding: EdgeInsets.fromLTRB(20, isDialogue && speaker != null ? 10 : 14, 20, 20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (isDialogue && speaker != null) ...[            Text(
-              speaker!,
-              style: AppTextStyles.labelSmall.copyWith(
-                color: AppColors.accent,
-                fontSize: 10,
-                letterSpacing: 2.0,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 6),
-          ],
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(child: Text(displayText, style: textStyle)),
-              if (showBlink)
-                Padding(
-                  padding: const EdgeInsets.only(left: 4, bottom: 2),
-                  child: Opacity(
-                    opacity: blinkOpacity,
-                    child: Text(
-                      '▼',
-                      style: AppTextStyles.labelSmall.copyWith(
-                        color: AppColors.accentLight,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}

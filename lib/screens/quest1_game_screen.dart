@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/utils/app_assets.dart';
+import '../widgets/story_dialogue_box.dart';
 import 'quest1_panel4_outro.dart';
 
 // ════════════════════════════════════════════════════════════════════════════
@@ -56,26 +57,36 @@ class _Line {
 }
 
 const _tutorialLines = [
-  _Line('MR. MENDELEEV',
-      "Let's proceed to your first task. Don't worry, it's very simple."),
-  _Line('MR. MENDELEEV',
-      "This task will test your memory. But instead of random cards, you will be working with the elements of the periodic table."),
-  _Line('MR. MENDELEEV',
-      "Each card represents an element. Some cards show the chemical symbol while others show the full name."),
-  _Line('MR. MENDELEEV',
-      "Your goal is to match them correctly — symbol to name, name to symbol. That's it."),
-  _Line('MR. MENDELEEV',
-      "For example, if you flip over 'Mg', you should look for 'Magnesium'."),
-  _Line('MR. MENDELEEV',
-      "Here's where your memory comes in — you flip two cards at a time. If they match, they stay revealed. If they don't, they flip back."),
-  _Line('MR. MENDELEEV',
-      "But be careful. Some symbols look nothing like the names they represent."),
+  _Line(
+    'MR. MENDELEEV',
+    "Let's proceed to your first task. Pay close attention to the rules.",
+  ),
+  _Line(
+    'MR. MENDELEEV',
+    'This task will test your memory, but the cards are all periodic table elements.',
+  ),
+  _Line(
+    'MR. MENDELEEV',
+    'Important: match each chemical symbol with its correct element name.',
+  ),
+  _Line('MR. MENDELEEV', 'You may flip only two cards at a time.'),
+  _Line('MR. MENDELEEV', 'If the pair is correct, both cards stay revealed.'),
+  _Line(
+    'MR. MENDELEEV',
+    'If the pair is wrong, both cards flip back and you try again.',
+  ),
+  _Line(
+    'MR. MENDELEEV',
+    "For example, 'Mg' matches 'Magnesium'. Some symbols look nothing like the names they represent, so stay sharp.",
+  ),
 ];
 
 const _trialIntroLines = [
-  _Line('MR. MENDELEEV',
-      "Before the real game begins, let's do a quick practice round."),
-  _Line('MR. MENDELEEV', "No pressure here. Ready?"),
+  _Line(
+    'MR. MENDELEEV',
+    "Before the real game begins, let's do a quick practice round.",
+  ),
+  _Line('MR. MENDELEEV', 'No pressure here. Ready to practice?'),
 ];
 
 const _trialAfterLines = [
@@ -86,7 +97,10 @@ const _trialAfterLines = [
 
 const _preRoundLines = [
   _Line('MR. MENDELEEV', "The real game starts now."),
-  _Line('MR. MENDELEEV', "Focus, and trust your memory."),
+  _Line(
+    'MR. MENDELEEV',
+    'Remember: match the symbol to the full element name.',
+  ),
   _Line('MR. MENDELEEV', "Good luck!"),
 ];
 
@@ -185,20 +199,26 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
     _fadeInCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 700))
-      ..forward();
+      vsync: this,
+      duration: const Duration(milliseconds: 700),
+    )..forward();
     _fadeIn = CurvedAnimation(parent: _fadeInCtrl, curve: Curves.easeIn);
 
     _typeCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 100));
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+    );
     _typeAnim = const AlwaysStoppedAnimation<int>(0);
 
     _blinkCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 550))
-      ..repeat(reverse: true);
+      vsync: this,
+      duration: const Duration(milliseconds: 550),
+    )..repeat(reverse: true);
 
     _endFadeCtrl = AnimationController(
-        vsync: this, duration: const Duration(milliseconds: 1300));
+      vsync: this,
+      duration: const Duration(milliseconds: 1300),
+    );
     _endFade = CurvedAnimation(parent: _endFadeCtrl, curve: Curves.easeIn);
 
     _showLine(_tutorialLines[0]);
@@ -226,8 +246,10 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
     });
     final ms = math.min(line.text.length * 26, 3200);
     _typeCtrl.duration = Duration(milliseconds: ms);
-    _typeAnim = IntTween(begin: 0, end: line.text.length)
-        .animate(CurvedAnimation(parent: _typeCtrl, curve: Curves.linear));
+    _typeAnim = IntTween(
+      begin: 0,
+      end: line.text.length,
+    ).animate(CurvedAnimation(parent: _typeCtrl, curve: Curves.linear));
     _typeCtrl
       ..reset()
       ..forward().then((_) {
@@ -308,13 +330,16 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
       final key = 'p$i';
       cards.add(_Card(id: '${key}_s', pairKey: key, text: sym, isSymbol: true));
       cards.add(
-          _Card(id: '${key}_n', pairKey: key, text: name, isSymbol: false));
+        _Card(id: '${key}_n', pairKey: key, text: name, isSymbol: false),
+      );
     }
     cards.shuffle(math.Random());
 
     for (final card in cards) {
       _flipCtrls[card.id] = AnimationController(
-          vsync: this, duration: const Duration(milliseconds: 380));
+        vsync: this,
+        duration: const Duration(milliseconds: 380),
+      );
     }
 
     setState(() {
@@ -371,8 +396,12 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
         if (matched) {
           _showLine(const _Line('MR. MENDELEEV', "That's a match. Well done."));
         } else {
-          _showLine(const _Line(
-              'MR. MENDELEEV', "Not quite. Remember where you saw it."));
+          _showLine(
+            const _Line(
+              'MR. MENDELEEV',
+              "Not quite. Remember where you saw it.",
+            ),
+          );
         }
       });
     }
@@ -389,7 +418,11 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
 
       if (_phase == _Phase.trial && _trialStep == 2) {
         Future.delayed(const Duration(milliseconds: 2200), () {
-          if (mounted) setState(() { _trialStep = 3; _dialogue = ''; });
+          if (mounted)
+            setState(() {
+              _trialStep = 3;
+              _dialogue = '';
+            });
         });
       }
       if (_matchedPairs == _totalPairs) _onBoardComplete();
@@ -401,7 +434,11 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
         _flipCtrls[b.id]!.reverse();
         if (_phase == _Phase.trial && _trialStep == 2) {
           Future.delayed(const Duration(milliseconds: 600), () {
-            if (mounted) setState(() { _trialStep = 3; _dialogue = ''; });
+            if (mounted)
+              setState(() {
+                _trialStep = 3;
+                _dialogue = '';
+              });
           });
         }
         setState(() {
@@ -579,7 +616,8 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
                 top: 20,
                 left: 20,
                 child: _LocationBadge(
-                    label: 'Elixir Enterprises  ·  Laboratory'),
+                  label: 'Elixir Enterprises  ·  Laboratory',
+                ),
               ),
 
               // ── Round / phase chip
@@ -599,6 +637,10 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
               if (_showRoundBanner) _buildRoundBanner(),
 
               // ── VN dialogue / commentary box
+              if (_phase == _Phase.tutorial ||
+                  _phase == _Phase.trialIntro ||
+                  _phase == _Phase.preRound)
+                _buildInstructionCallout(size),
               _buildDialogueArea(size),
 
               // ── End fade-to-black
@@ -651,11 +693,13 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
             spacing: gap,
             runSpacing: gap,
             children: _board
-                .map((card) => SizedBox(
-                      width: cardW,
-                      height: cardH,
-                      child: _buildCard(card),
-                    ))
+                .map(
+                  (card) => SizedBox(
+                    width: cardW,
+                    height: cardH,
+                    child: _buildCard(card),
+                  ),
+                )
                 .toList(),
           ),
         ),
@@ -665,7 +709,8 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
 
   Widget _buildCard(_Card card) {
     final ctrl = _flipCtrls[card.id]!;
-    final canTap = (_phase == _Phase.trial || _phase == _Phase.playing) &&
+    final canTap =
+        (_phase == _Phase.trial || _phase == _Phase.playing) &&
         !_lockBoard &&
         !card.matched;
     return GestureDetector(
@@ -681,8 +726,7 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
               ..setEntry(3, 2, 0.001)
               ..rotateY(v * math.pi),
             child: showFront
-                ? Transform.scale(
-                    scaleX: -1, child: _buildCardFront(card))
+                ? Transform.scale(scaleX: -1, child: _buildCardFront(card))
                 : _buildCardBack(),
           );
         },
@@ -699,11 +743,13 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
           end: Alignment.bottomRight,
           colors: [Color(0xFF1E0A3C), Color(0xFF0D051E)],
         ),
-        border:
-            Border.all(color: AppColors.accent.withAlpha(150), width: 1.5),
+        border: Border.all(color: AppColors.accent.withAlpha(150), width: 1.5),
         boxShadow: const [
           BoxShadow(
-              color: Color(0x44000000), blurRadius: 6, offset: Offset(0, 3))
+            color: Color(0x44000000),
+            blurRadius: 6,
+            offset: Offset(0, 3),
+          ),
         ],
       ),
       child: Center(
@@ -712,16 +758,19 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
           height: 22,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
-            border:
-                Border.all(color: AppColors.accent.withAlpha(180), width: 1),
+            border: Border.all(
+              color: AppColors.accent.withAlpha(180),
+              width: 1,
+            ),
           ),
           child: const Center(
             child: Text(
               '?',
               style: TextStyle(
-                  color: AppColors.accentLight,
-                  fontSize: 12,
-                  fontWeight: FontWeight.bold),
+                color: AppColors.accentLight,
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ),
         ),
@@ -760,8 +809,7 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+            padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
             decoration: BoxDecoration(
               color: card.isSymbol
                   ? AppColors.accent.withAlpha(30)
@@ -786,18 +834,19 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
             textAlign: TextAlign.center,
             style: TextStyle(
               fontSize: card.isSymbol ? 18 : 11,
-              fontWeight:
-                  card.isSymbol ? FontWeight.w700 : FontWeight.w500,
-              color:
-                  card.isSymbol ? AppColors.accent : AppColors.textPrimary,
+              fontWeight: card.isSymbol ? FontWeight.w700 : FontWeight.w500,
+              color: card.isSymbol ? AppColors.accent : AppColors.textPrimary,
               letterSpacing: card.isSymbol ? 1.5 : 0.3,
               height: 1.2,
             ),
           ),
           if (isMatched) ...[
             const SizedBox(height: 4),
-            const Icon(Icons.check_circle_outline,
-                color: Color(0xFF50D070), size: 12),
+            const Icon(
+              Icons.check_circle_outline,
+              color: Color(0xFF50D070),
+              size: 12,
+            ),
           ],
         ],
       ),
@@ -814,8 +863,7 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
       child: Center(
         child: Container(
           margin: const EdgeInsets.only(top: 64),
-          padding:
-              const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
+          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 8),
           decoration: BoxDecoration(
             color: _feedbackCorrect
                 ? const Color(0xDD0C2010)
@@ -832,9 +880,7 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
             mainAxisSize: MainAxisSize.min,
             children: [
               Icon(
-                _feedbackCorrect
-                    ? Icons.check_circle_outline
-                    : Icons.close,
+                _feedbackCorrect ? Icons.check_circle_outline : Icons.close,
                 color: _feedbackCorrect
                     ? const Color(0xFF50D070)
                     : const Color(0xFFD05050),
@@ -869,8 +915,11 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
-                const Icon(Icons.emoji_events_outlined,
-                    color: AppColors.accent, size: 44),
+                const Icon(
+                  Icons.emoji_events_outlined,
+                  color: AppColors.accent,
+                  size: 44,
+                ),
                 const SizedBox(height: 14),
                 Text(
                   _roundBannerText,
@@ -883,8 +932,9 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
                 const SizedBox(height: 8),
                 Text(
                   '$_matchedPairs pairs matched',
-                  style: AppTextStyles.bodySmall
-                      .copyWith(color: AppColors.textSecondary),
+                  style: AppTextStyles.bodySmall.copyWith(
+                    color: AppColors.textSecondary,
+                  ),
                 ),
               ],
             ),
@@ -912,13 +962,68 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColors.accent.withAlpha(60)),
               ),
-              child: Text(
-                '$_matchedPairs / $_totalPairs  matched',
-                style: AppTextStyles.labelSmall.copyWith(
-                  color: AppColors.textSecondary,
-                  fontSize: 11,
-                  letterSpacing: 1,
-                ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'IMPORTANT: MATCH SYMBOL + ELEMENT NAME',
+                    style: AppTextStyles.labelSmall.copyWith(
+                      color: AppColors.accent,
+                      fontSize: 9,
+                      letterSpacing: 1.6,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '$_matchedPairs / $_totalPairs  matched',
+                    style: AppTextStyles.labelSmall.copyWith(
+                      color: AppColors.textSecondary,
+                      fontSize: 11,
+                      letterSpacing: 1,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      }
+      if (_phase == _Phase.trial) {
+        return Positioned(
+          left: 0,
+          right: 0,
+          bottom: 10,
+          child: Center(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+              decoration: BoxDecoration(
+                color: const Color(0xBB060318),
+                borderRadius: BorderRadius.circular(16),
+                border: Border.all(color: AppColors.accent.withAlpha(60)),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    'PRACTICE: FIND THE MATCHING PAIR',
+                    style: AppTextStyles.labelSmall.copyWith(
+                      color: AppColors.accent,
+                      fontSize: 9,
+                      letterSpacing: 1.6,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    'Flip 2 cards. Match symbol to full element name.',
+                    style: AppTextStyles.labelSmall.copyWith(
+                      color: AppColors.textSecondary,
+                      fontSize: 11,
+                      letterSpacing: 0.8,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -938,13 +1043,97 @@ class _Quest1GameScreenState extends State<Quest1GameScreen>
         builder: (_, __) {
           final len = _typeAnim.value.clamp(0, _dialogue.length);
           final display = _dialogue.substring(0, len);
-          return _VnBox(
-            speaker: _speaker,
-            text: display,
+          return StoryDialogueBox(
+            speaker: _speaker.isEmpty ? null : _speaker,
+            displayText: display,
+            textStyle: AppTextStyles.narrative,
             showBlink: _dialogueDone && _isDialoguePhase,
             blinkOpacity: _blinkCtrl.value,
+            portraitMotionValue: _typeCtrl.value,
           );
         },
+      ),
+    );
+  }
+
+  Widget _buildInstructionCallout(Size size) {
+    final width = math.min(size.width * 0.34, 320.0).toDouble();
+
+    return Positioned(
+      right: 20,
+      bottom: 126,
+      child: Container(
+        width: width,
+        padding: const EdgeInsets.fromLTRB(14, 14, 14, 14),
+        decoration: BoxDecoration(
+          color: const Color(0xD9150D27),
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.accent.withAlpha(120)),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withAlpha(60),
+              blurRadius: 18,
+              offset: const Offset(0, 8),
+            ),
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Row(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
+                  decoration: BoxDecoration(
+                    color: AppColors.accent.withAlpha(25),
+                    borderRadius: BorderRadius.circular(999),
+                    border: Border.all(color: AppColors.accent.withAlpha(80)),
+                  ),
+                  child: Text(
+                    'IMPORTANT',
+                    style: AppTextStyles.labelSmall.copyWith(
+                      color: AppColors.accent,
+                      fontWeight: FontWeight.w700,
+                      letterSpacing: 1.8,
+                    ),
+                  ),
+                ),
+                const SizedBox(width: 10),
+                SizedBox(
+                  width: 48,
+                  height: 64,
+                  child: Image.asset(
+                    AppAssets.mendeleevPortraitInstruction,
+                    fit: BoxFit.contain,
+                    alignment: Alignment.bottomCenter,
+                    filterQuality: FilterQuality.none,
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+            _InstructionLine(
+              label: 'GOAL',
+              text: 'Match each symbol with its full element name.',
+            ),
+            const SizedBox(height: 6),
+            _InstructionLine(
+              label: 'TURN',
+              text: 'Flip only 2 cards at a time.',
+            ),
+            const SizedBox(height: 6),
+            _InstructionLine(
+              label: 'MATCH',
+              text: 'Correct pairs stay revealed.',
+            ),
+            const SizedBox(height: 6),
+            _InstructionLine(label: 'MISS', text: 'Wrong pairs flip back.'),
+          ],
+        ),
       ),
     );
   }
@@ -1009,16 +1198,20 @@ class _LocationBadge extends StatelessWidget {
         border: Border.all(color: AppColors.accent.withAlpha(100), width: 1),
         boxShadow: [
           BoxShadow(
-              color: AppColors.accent.withAlpha(25),
-              blurRadius: 10,
-              spreadRadius: 1),
+            color: AppColors.accent.withAlpha(25),
+            blurRadius: 10,
+            spreadRadius: 1,
+          ),
         ],
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.location_on_outlined,
-              color: AppColors.accentLight, size: 12),
+          const Icon(
+            Icons.location_on_outlined,
+            color: AppColors.accentLight,
+            size: 12,
+          ),
           const SizedBox(width: 6),
           Text(
             label,
@@ -1038,63 +1231,32 @@ class _LocationBadge extends StatelessWidget {
 //  VN TEXT BOX
 // ════════════════════════════════════════════════════════════════════════════
 
-class _VnBox extends StatelessWidget {
-  const _VnBox({
-    required this.speaker,
-    required this.text,
-    required this.showBlink,
-    required this.blinkOpacity,
-  });
-  final String speaker;
+class _InstructionLine extends StatelessWidget {
+  const _InstructionLine({required this.label, required this.text});
+
+  final String label;
   final String text;
-  final bool showBlink;
-  final double blinkOpacity;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xD40A0718),
-        border: Border(top: BorderSide(color: AppColors.accent, width: 1.5)),
-      ),
-      padding: EdgeInsets.fromLTRB(20, speaker.isNotEmpty ? 10 : 14, 20, 20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return RichText(
+      text: TextSpan(
         children: [
-          if (speaker.isNotEmpty) ...[
-            Text(
-              speaker,
-              style: AppTextStyles.labelSmall.copyWith(
-                color: AppColors.accent,
-                fontSize: 10,
-                letterSpacing: 2.0,
-                fontWeight: FontWeight.w700,
-              ),
+          TextSpan(
+            text: '$label  ',
+            style: AppTextStyles.labelSmall.copyWith(
+              color: AppColors.accent,
+              fontWeight: FontWeight.w700,
+              letterSpacing: 1.2,
             ),
-            const SizedBox(height: 6),
-          ],
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(
-                child: Text(text, style: AppTextStyles.narrative),
-              ),
-              if (showBlink)
-                Padding(
-                  padding: const EdgeInsets.only(left: 4, bottom: 2),
-                  child: Opacity(
-                    opacity: blinkOpacity,
-                    child: Text(
-                      '▼',
-                      style: AppTextStyles.labelSmall.copyWith(
-                        color: AppColors.accentLight,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ),
-            ],
+          ),
+          TextSpan(
+            text: text,
+            style: AppTextStyles.bodySmall.copyWith(
+              color: AppColors.textPrimary,
+              fontSize: 12,
+              height: 1.4,
+            ),
           ),
         ],
       ),

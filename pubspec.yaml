@@ -64,6 +64,8 @@ flutter:
   assets:
     - assets/
     - assets/images/
+    - assets/images/Mendeleev Sprite/
+    - assets/images/Panel 1/
     - assets/images/Panel 1/
     - assets/images/Panel 2/
     - assets/images/Panel 3/

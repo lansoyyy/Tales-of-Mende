@@ -4,13 +4,21 @@ import 'package:flutter/services.dart';
 import '../core/constants/app_colors.dart';
 import '../core/constants/app_text_styles.dart';
 import '../core/utils/app_assets.dart';
+import '../widgets/story_dialogue_box.dart';
 import 'quest1_game_screen.dart';
 
 // ════════════════════════════════════════════════════════════════════════════
 //  SCRIPT — Quest 1 · Panel 3
 // ════════════════════════════════════════════════════════════════════════════
 
-enum _EntryType { narrative, innerThought, dialogue, sfxBeat, popUpFx, endScene }
+enum _EntryType {
+  narrative,
+  innerThought,
+  dialogue,
+  sfxBeat,
+  popUpFx,
+  endScene,
+}
 
 class _ScriptEntry {
   const _ScriptEntry(this.type, this.text, {this.speaker});
@@ -62,10 +70,7 @@ const List<_ScriptEntry> _script = [
     '"It is a pleasure to work with you, sir!"',
     speaker: 'PLAYER',
   ),
-  _ScriptEntry(
-    _EntryType.narrative,
-    'The two of you shared a polite smile.',
-  ),
+  _ScriptEntry(_EntryType.narrative, 'The two of you shared a polite smile.'),
   _ScriptEntry(
     _EntryType.dialogue,
     '"See to it our intern settles in well, Mendeleev."',
@@ -90,7 +95,10 @@ const List<_ScriptEntry> _script = [
     '"Don\'t be intimidated by him. Mr. Graham is always like that."',
     speaker: 'MR. MENDELEEV',
   ),
-  _ScriptEntry(_EntryType.narrative, 'You turned your attention back to Mr. Mendeleev.'),
+  _ScriptEntry(
+    _EntryType.narrative,
+    'You turned your attention back to Mr. Mendeleev.',
+  ),
   _ScriptEntry(
     _EntryType.dialogue,
     '"Come, I\'ll show you around."',
@@ -100,11 +108,7 @@ const List<_ScriptEntry> _script = [
     _EntryType.narrative,
     'You settled in fairly quickly, no thanks to Mr. Mendeleev\'s warm hospitality. Before long, he gestured to a neatly arranged stack of cards on the counter.',
   ),
-  _ScriptEntry(
-    _EntryType.dialogue,
-    '"What\'s this?"',
-    speaker: 'PLAYER',
-  ),
+  _ScriptEntry(_EntryType.dialogue, '"What\'s this?"', speaker: 'PLAYER'),
   _ScriptEntry(_EntryType.narrative, 'Mr. Mendeleev chuckled softly.'),
   _ScriptEntry(
     _EntryType.dialogue,
@@ -222,8 +226,10 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
   void _startTypewriter(String text) {
     final ms = math.min(text.length * 28, 3200);
     _typeCtrl.duration = Duration(milliseconds: ms);
-    _typeAnim = IntTween(begin: 0, end: text.length)
-        .animate(CurvedAnimation(parent: _typeCtrl, curve: Curves.linear));
+    _typeAnim = IntTween(
+      begin: 0,
+      end: text.length,
+    ).animate(CurvedAnimation(parent: _typeCtrl, curve: Curves.linear));
     _typeCtrl
       ..reset()
       ..forward();
@@ -320,11 +326,7 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
               ),
 
               // ── Cool desaturating overlay (makes lab feel clinical)
-              IgnorePointer(
-                child: Container(
-                  color: const Color(0x18000820),
-                ),
-              ),
+              IgnorePointer(child: Container(color: const Color(0x18000820))),
 
               // ── Edge vignette
               IgnorePointer(
@@ -364,7 +366,8 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
                 top: 20,
                 left: 20,
                 child: _LocationBadge(
-                    label: 'Elixir Enterprises  ·  Laboratory'),
+                  label: 'Elixir Enterprises  ·  Laboratory',
+                ),
               ),
 
               // ── Panel chip
@@ -385,12 +388,15 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
                       opacity: _sfxAnim,
                       child: Container(
                         padding: const EdgeInsets.symmetric(
-                            horizontal: 14, vertical: 6),
+                          horizontal: 14,
+                          vertical: 6,
+                        ),
                         decoration: BoxDecoration(
                           color: const Color(0xCC0A0718),
                           borderRadius: BorderRadius.circular(20),
                           border: Border.all(
-                              color: AppColors.accent.withAlpha(100)),
+                            color: AppColors.accent.withAlpha(100),
+                          ),
                         ),
                         child: Text(
                           _sfxLabel,
@@ -435,7 +441,8 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
     final entry = _current;
     if (entry.type == _EntryType.endScene) return const SizedBox.shrink();
     if (entry.type == _EntryType.popUpFx) return const SizedBox.shrink();
-    if (entry.type == _EntryType.sfxBeat && _sfxVisible) return const SizedBox.shrink();
+    if (entry.type == _EntryType.sfxBeat && _sfxVisible)
+      return const SizedBox.shrink();
     return Positioned(
       left: 0,
       right: 0,
@@ -447,12 +454,16 @@ class _Quest1Panel3LabState extends State<Quest1Panel3Lab>
           final full = entry.text;
           final display = full.substring(0, chars.clamp(0, full.length));
           final isDone = !_typeCtrl.isAnimating && _typeCtrl.value >= 1.0;
-          return _VnTextBox(
-            entryType: entry.type,
+          final textStyle = entry.type == _EntryType.innerThought
+              ? AppTextStyles.narrative.copyWith(color: AppColors.accentLight)
+              : AppTextStyles.narrative;
+          return StoryDialogueBox(
             speaker: entry.speaker,
             displayText: display,
+            textStyle: textStyle,
             showBlink: isDone,
             blinkOpacity: _blinkCtrl.value,
+            portraitMotionValue: _typeCtrl.value,
           );
         },
       ),
@@ -487,8 +498,11 @@ class _LocationBadge extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          const Icon(Icons.location_on_outlined,
-              color: AppColors.accentLight, size: 12),
+          const Icon(
+            Icons.location_on_outlined,
+            color: AppColors.accentLight,
+            size: 12,
+          ),
           const SizedBox(width: 6),
           Text(
             label,
@@ -537,72 +551,3 @@ class _PanelChip extends StatelessWidget {
 // ════════════════════════════════════════════════════════════════════════════
 //  VN TEXT BOX
 // ════════════════════════════════════════════════════════════════════════════
-
-class _VnTextBox extends StatelessWidget {
-  const _VnTextBox({
-    required this.entryType,
-    required this.displayText,
-    required this.showBlink,
-    required this.blinkOpacity,
-    this.speaker,
-  });
-
-  final _EntryType entryType;
-  final String displayText;
-  final bool showBlink;
-  final double blinkOpacity;
-  final String? speaker;
-
-  @override
-  Widget build(BuildContext context) {
-    final isDialogue = entryType == _EntryType.dialogue;
-    final textStyle = entryType == _EntryType.innerThought
-        ? AppTextStyles.narrative.copyWith(color: AppColors.accentLight)
-        : AppTextStyles.narrative;
-
-    return Container(
-      decoration: const BoxDecoration(
-        color: Color(0xD40A0718),
-        border: Border(top: BorderSide(color: AppColors.accent, width: 1.5)),
-      ),
-      padding: EdgeInsets.fromLTRB(20, isDialogue && speaker != null ? 10 : 14, 20, 20),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          if (isDialogue && speaker != null) ...[            Text(
-              speaker!,
-              style: AppTextStyles.labelSmall.copyWith(
-                color: AppColors.accent,
-                fontSize: 10,
-                letterSpacing: 2.0,
-                fontWeight: FontWeight.w700,
-              ),
-            ),
-            const SizedBox(height: 6),
-          ],
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Expanded(child: Text(displayText, style: textStyle)),
-              if (showBlink)
-                Padding(
-                  padding: const EdgeInsets.only(left: 4, bottom: 2),
-                  child: Opacity(
-                    opacity: blinkOpacity,
-                    child: Text(
-                      '▼',
-                      style: AppTextStyles.labelSmall.copyWith(
-                        color: AppColors.accentLight,
-                        fontSize: 12,
-                      ),
-                    ),
-                  ),
-                ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-}

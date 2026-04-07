@@ -28,10 +28,19 @@ class _Panel5GameLoadingScreenState extends State<Panel5GameLoadingScreen>
 
   int _tipIndex = 0;
   static const _tips = [
-    'Explore Mende and uncover its mysteries…',
-    'Complete quests to earn experience points.',
-    'Mix the right potions to progress in the lab.',
-    'The story changes based on your choices.',
+    'Elements are arranged by increasing atomic number.',
+    'Each element has a unique number of protons.',
+    'Elements in the same column, or group, have similar properties.',
+    'Rows in the periodic table are called periods.',
+    'Metals are found on the left side of the table.',
+    'Nonmetals are found on the right side.',
+    'Metalloids have properties of both metals and nonmetals.',
+    'The alkali metals in Group 1 are highly reactive.',
+    'The noble gases in Group 18 are stable and rarely react.',
+    'Atomic size increases as you go down a group.',
+    'Atomic size decreases as you go across a period.',
+    'Transition metals are found in the middle of the table.',
+    'The periodic table helps predict how elements will react.',
   ];
 
   @override
@@ -71,7 +80,7 @@ class _Panel5GameLoadingScreenState extends State<Panel5GameLoadingScreen>
   }
 
   void _cycleTip() {
-    Future.delayed(const Duration(milliseconds: 1100), () {
+    Future.delayed(const Duration(milliseconds: 1500), () {
       if (!mounted) return;
       _tipFadeController.reverse().then((_) {
         if (!mounted) return;
@@ -181,6 +190,16 @@ class _Panel5GameLoadingScreenState extends State<Panel5GameLoadingScreen>
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  Text(
+                    'CHEM TIP',
+                    style: AppTextStyles.labelSmall.copyWith(
+                      color: AppColors.accent,
+                      fontSize: 10,
+                      letterSpacing: 2.2,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
                   // Tip text
                   FadeTransition(
                     opacity: _tipFade,

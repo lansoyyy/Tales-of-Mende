@@ -103,6 +103,16 @@ class AppAssets {
   static const String quest1ReceptionHall2 =
       'assets/images/Panel 10 Q1/40476a64-1f18-4261-bc38-196ec6d8a3c4.jpeg';
 
+  // ── Mendeleev Portrait Frames ────────────────────────────────────────────
+  static const String mendeleevPortraitIdle =
+      'assets/images/Mendeleev Sprite/IMG_6855.PNG';
+  static const String mendeleevPortraitInstruction =
+      'assets/images/Mendeleev Sprite/IMG_6856.PNG';
+  static const List<String> mendeleevPortraitTalkFrames = [
+    'assets/images/Mendeleev Sprite/IMG_6858.PNG',
+    'assets/images/Mendeleev Sprite/IMG_6859.PNG',
+  ];
+
   // ── Panel 11 — Quest Complete ─────────────────────────────────────────────
   static const String questCompleteBg =
       'assets/images/Panel 11/\$Completed quest  copy.png';
